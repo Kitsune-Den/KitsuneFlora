@@ -22,34 +22,36 @@
     <append xpath="/blocks">
 
         <!-- ============================================================
-             SAKURA (Cherry Blossom in flower) — iconic pink/white blooms
+             KITSUNE TREE TEMPLATE
              ============================================================
-             Pattern follows Gyancher Trees (older mod that works in V2.6):
-             - Explicit Material override (was inheriting silently before)
-             - NO re-stated Path or Collide (let inheritance from treeMaster
-               do its thing; re-stating same values seems to confuse V2.6's
-               solidity calc)
-             - Bundle has no colliders (verified Gyancher ships zero —
-               block-level Path=solid + MultiBlockDim is what enforces
-               player movement collision, not prefab colliders)
+             Per War3zuk FarmLife pattern (Nexus 2108) for V2.6: define a
+             template extending treeMaster with a VANILLA prefab path,
+             then have actual blocks extend the template and override Model
+             to the mod bundle. Registration happens against the vanilla
+             path during loading; the override just swaps visual mesh.
+             Without this two-step, mod-bundle blocks fail terrain
+             registration → walk-through.
         -->
-        <block name="treeKitsuneSakura">
+        <block name="treeKitsuneMaster">
             <property name="Extends" value="treeMaster"/>
             <property name="Material" value="MtreeWoodLarge"/>
-            <!-- Shape="ModelEntity" overrides treeMaster's DistantDecoTree
-                 inheritance. DistantDecoTree is V2.6-broken for mod-side
-                 bundles (silently fails terrain registration → walk-through,
-                 un-hittable). ModelEntity is what vanilla paintings use and
-                 it works with #@modfolder: bundle references. -->
-            <property name="Shape" value="ModelEntity"/>
-            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?CherryBlossom_flower_roadside_1.prefab"/>
+            <property name="Model" value="#Entities/Trees?StudioGimbal/OakSml01/OakSml01GimbalPrefab.prefab"/>
             <property name="ModelOffset" value="0,-0.3,0"/>
             <property name="MultiBlockDim" value="1,7,1"/>
             <property name="BigDecorationRadius" value="4"/>
             <property name="ParticleOnDeath" value="treeGib_dead_01"/>
+            <property name="Path" value="solid"/>
             <drop event="Harvest" name="resourceWood" count="30" tag="oreWoodHarvest,lumberjackHarvest"/>
-            <drop event="Destroy" name="treePlantedKitsuneSakura1m" count="1"/>
             <property name="SortOrder1" value="B901"/>
+        </block>
+
+        <!-- ============================================================
+             SAKURA (Cherry Blossom in flower) — iconic pink/white blooms
+        -->
+        <block name="treeKitsuneSakura">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraRoot"/>
+            <drop event="Destroy" name="treePlantedKitsuneSakura1m" count="1"/>
             <property name="CustomIcon" value="treeKitsuneSakura"/>
             <property name="EconomicValue" value="36"/>
         </block>
@@ -80,17 +82,9 @@
              SAKURA LEAF (Cherry Blossom in leaf, off-bloom variant)
         -->
         <block name="treeKitsuneSakuraLeaf">
-            <property name="Extends" value="treeMaster"/>
-            <property name="Material" value="MtreeWoodLarge"/>
-            <property name="Shape" value="ModelEntity"/>
-            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?CherryBlossom_leaf_roadside_1.prefab"/>
-            <property name="ModelOffset" value="0,-0.3,0"/>
-            <property name="MultiBlockDim" value="1,7,1"/>
-            <property name="BigDecorationRadius" value="4"/>
-            <property name="ParticleOnDeath" value="treeGib_dead_01"/>
-            <drop event="Harvest" name="resourceWood" count="30" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraLeafRoot"/>
             <drop event="Destroy" name="treePlantedKitsuneSakuraLeaf1m" count="1"/>
-            <property name="SortOrder1" value="B901"/>
             <property name="CustomIcon" value="treeKitsuneSakuraLeaf"/>
             <property name="EconomicValue" value="32"/>
         </block>
@@ -121,17 +115,12 @@
              KEYAKI (Japanese Zelkova) — large, broad-canopy shade tree
         -->
         <block name="treeKitsuneKeyaki">
-            <property name="Extends" value="treeMaster"/>
-            <property name="Material" value="MtreeWoodLarge"/>
-            <property name="Shape" value="ModelEntity"/>
-            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?Keyaki_L.prefab"/>
-            <property name="ModelOffset" value="0,-0.3,0"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneKeyakiRoot"/>
             <property name="MultiBlockDim" value="1,12,1"/>
             <property name="BigDecorationRadius" value="6"/>
-            <property name="ParticleOnDeath" value="treeGib_dead_01"/>
             <drop event="Harvest" name="resourceWood" count="60" tag="oreWoodHarvest,lumberjackHarvest"/>
             <drop event="Destroy" name="treePlantedKitsuneKeyaki1m" count="1"/>
-            <property name="SortOrder1" value="B901"/>
             <property name="CustomIcon" value="treeKitsuneKeyaki"/>
             <property name="EconomicValue" value="48"/>
         </block>

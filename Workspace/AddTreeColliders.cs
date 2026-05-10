@@ -40,41 +40,25 @@ public static class AddTreeColliders
 
             try
             {
-                // Remove any old root-level CapsuleCollider from previous runs.
-                var rootCol = go.GetComponent<CapsuleCollider>();
-                if (rootCol != null) Object.DestroyImmediate(rootCol);
-
-                // 7DTD's ModelTree class finds collision via child GameObjects
-                // named "CollisionObject0", "CollisionObject1" etc. (verified
-                // in vanilla trees bundle). Root-level colliders on the prefab
-                // are not seen. Create or reuse the child wrapper.
-                Transform child = go.transform.Find("CollisionObject0");
-                if (child == null)
-                {
-                    var childGO = new GameObject("CollisionObject0");
-                    childGO.transform.SetParent(go.transform, false);
-                    child = childGO.transform;
-                    added++;
-                }
-                else
-                {
-                    replaced++;
-                }
-
-                // Replace any existing colliders on the child to make idempotent.
-                foreach (var oldCol in child.gameObject.GetComponents<Collider>())
+                // Remove the CollisionObject0 child + any root colliders from
+                // previous runs to make this idempotent.
+                var oldChild = go.transform.Find("CollisionObject0");
+                if (oldChild != null) Object.DestroyImmediate(oldChild.gameObject);
+                foreach (var oldCol in go.GetComponents<Collider>())
                     Object.DestroyImmediate(oldCol);
 
-                // BoxCollider sized to the trunk's bounding box. Some 7DTD
-                // physics paths may only register Box-shape colliders for
-                // movement collision; CapsuleCollider alone wasn't blocking.
-                var box = child.gameObject.AddComponent<BoxCollider>();
+                // Per War3zuk FarmLife pattern (verified working in V2.6):
+                // BoxCollider goes DIRECTLY ON THE PREFAB ROOT GameObject,
+                // NOT in a CollisionObject0 child. Vanilla trees' nested
+                // collider pattern doesn't apply to mod-side bundles.
+                var box = go.AddComponent<BoxCollider>();
                 box.center = new Vector3(0f, centerY, 0f);
                 box.size = new Vector3(radius * 2f, height, radius * 2f);
                 box.isTrigger = false;
+                added++;
 
                 PrefabUtility.SaveAsPrefabAsset(go, path);
-                Debug.Log($"[KitsuneFlora] CollisionObject0 on {System.IO.Path.GetFileNameWithoutExtension(path)}: " +
+                Debug.Log($"[KitsuneFlora] Root BoxCollider on {System.IO.Path.GetFileNameWithoutExtension(path)}: " +
                           $"radius={radius} height={height} centerY={centerY}");
             }
             finally

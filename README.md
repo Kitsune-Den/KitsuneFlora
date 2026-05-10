@@ -4,7 +4,7 @@ Standalone 7DTD V2.6 mod adding Japanese-themed trees: cherry blossom (sakura), 
 
 ## Status
 
-**WIP — paused 2026-05-10.** Bundle pipeline + XML scaffolding complete; trees render correctly in-world but currently fail terrain registration (walk-through, un-hittable). Engine-side issue, see "Next session" below.
+**🌸 WORKING 2026-05-10.** Trees are solid, chop-able, drop wood + sapling, plant via sapling block. First documented V2.6 working pattern for custom-mesh blocks via mod bundle.
 
 ## Layout
 
@@ -31,30 +31,33 @@ Asset source: [Roadside Trees](https://assetstore.unity.com) Unity Asset Store p
 | `treeKitsuneSakuraLeaf` | `treePlantedKitsuneSakuraLeaf1m` | `?CherryBlossom_leaf_roadside_1.prefab` |
 | `treeKitsuneKeyaki` | `treePlantedKitsuneKeyaki1m` | `?Keyaki_L.prefab` |
 
-## Known issue: trees aren't solid in V2.6
+## The bug nobody else online has documented
 
-Symptom: trees render fine but the player walks through them and can't chop them. Log shows `[MultiBlockManager][Alignment] SetTerrainAlignmentDirty failed; no terrain-aligned block has been registered`.
+Asset Store FBX-derived prefabs (Roadside Trees, etc.) share their **root GameObject name** with the FBX file. When OCB UnityAssetExporter bundles the prefab, the FBX's auto-generated GameObject of the same name comes along as a dependency. The bundle ends up with **TWO root GameObjects with the same name**:
 
-What we tried (all failed):
-- XML `Path="solid"` + `Collide="movement,melee,..."` (explicit + inherited)
-- `Material="MtreeWoodLarge"` override
-- Bundle-side colliders (CapsuleCollider, BoxCollider, on root and on `CollisionObject0` child to mirror vanilla pattern)
-- `Shape="ModelEntity"` override (vanilla painting block shape)
-- `extends="treeMaster"` (and not re-stating Path/Collide so inheritance flows clean)
+- The FBX's auto-GameObject — Transform only, no LODGroup, no collider (registered first)
+- The actual prefab — Transform + LODGroup + BoxCollider (the real one)
 
-Reference mod **Gyancher Trees (Nexus 966)** — 2020-era custom-tree mod that worked in V1.x — doesn't even register in V2.6's gimme list. Suggests V2.6 changed something fundamental about block registration for mod-side bundle prefabs.
+When 7DTD's bundle loader resolves `#@modfolder:Bundle.unity3d?PrefabName`, it picks the FIRST GameObject with that name — the empty FBX wrapper. No collider → walk-through, no LODGroup → mesh missing in some draws.
 
-## Next session attack plan
+## The fix
 
-1. Decompile `Assembly-CSharp.dll` with ILSpy/dnSpy. Search for:
-   - `BlockModelTree` — class likely registered to handle ModelTree blocks
-   - `MultiBlockManager.SetTerrainAlignmentDirty` — emits the warning we're seeing
-   - `TerrainAlignedBlocks` registration code
-2. Find what `#@modfolder:` bundle paths require to register as terrain-aligned that vanilla `@:` paths don't need.
-3. Likely outcomes:
-   - Find a specific XML property we missed (e.g. `ModelType`, custom Class)
-   - Need a Harmony patch in a tiny DLL that registers our blocks with the terrain-alignment system
-   - Confirm V2.6 doesn't support custom-mesh block bundles at all (and switch strategy — maybe use entity-class with a placement script like vehicles do)
+Wrap each prefab in a **NEW outer GameObject** with a unique filename (e.g. `treeKitsuneSakuraRoot.prefab`) that doesn't collide with the FBX's auto-name. The new outer becomes the bundle root for that asset. Procedure:
+
+1. Editor script (`Workspace/WrapTreePrefabs.cs`) creates wrapper prefabs in `Assets/KitsuneTreeWrappers/` containing the original prefab as a child + a new `BoxCollider` on the wrapper root.
+2. Update the OCB Bundle asset's Objects list to point at the new wrapper prefabs.
+3. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot` etc.).
+4. Re-export bundle.
+
+Verification with UnityPy: bundle's top-level GameObjects should include `treeKitsuneSakuraRoot` (Transform + BoxCollider) and `treeKitsuneSakuraLeafRoot`/`treeKitsuneKeyakiRoot` similarly. The old FBX-named GameObjects may still be present but are no longer referenced by XML.
+
+## Other XML lessons learned along the way (all kept in current config)
+
+- Two-step XML pattern (template extending `treeMaster` with vanilla path → tree extending template with mod-bundle path) is the correct V2.6 inheritance flow per War3zuk FarmLife (Nexus 2108).
+- `Material="MtreeWoodLarge"` explicit override.
+- No re-stated `Path` or `Collide` (let inheritance handle).
+- Bundle-side BoxCollider on the wrapper root.
+- No `.prefab` extension on bundle asset names (`?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`).
 
 ## Author / License
 
