@@ -1,0 +1,13 @@
+# --- Unity asset bundles (rebuildable from Unity project) ---
+# The Unity project is the source of truth; .unity3d files are build artifacts.
+KitsuneFlora/Resources/Bundles/*.unity3d
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDE / Editor ---
+.vs/
+.vscode/
+.idea/

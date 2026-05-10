@@ -1,0 +1,13 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,english,Context / Alternate Text,german,latam,french,italian,japanese,koreana,polish,brazilian,russian,turkish,schinese,tchinese,spanish
+treeKitsuneSakura,blocks,Block,,,Sakura Tree,,,,,,,,,,,,,,
+treeKitsuneSakuraDesc,blocks,Block,,,A blooming cherry blossom in full pink-and-white flower. Sacred to kitsune lore — said to mark places where spirits cross between worlds.,,,,,,,,,,,,,,
+treeKitsuneSakuraLeaf,blocks,Block,,,Sakura Tree (Leaf),,,,,,,,,,,,,,
+treeKitsuneSakuraLeafDesc,blocks,Block,,,Cherry blossom out of bloom — green leaves still bring quiet beauty to a den.,,,,,,,,,,,,,,
+treeKitsuneKeyaki,blocks,Block,,,Keyaki Tree,,,,,,,,,,,,,,
+treeKitsuneKeyakiDesc,blocks,Block,,,Japanese zelkova — broad-canopy shade tree common to old shrines and roadsides.,,,,,,,,,,,,,,
+treePlantedKitsuneSakura1m,blocks,Block,,,Sakura Sapling,,,,,,,,,,,,,,
+treePlantedKitsuneSakura1mDesc,blocks,Block,,,Plant on dirt to grow a sakura tree.,,,,,,,,,,,,,,
+treePlantedKitsuneSakuraLeaf1m,blocks,Block,,,Sakura Sapling (Leaf),,,,,,,,,,,,,,
+treePlantedKitsuneSakuraLeaf1mDesc,blocks,Block,,,Plant on dirt to grow a sakura tree (leaf variant).,,,,,,,,,,,,,,
+treePlantedKitsuneKeyaki1m,blocks,Block,,,Keyaki Sapling,,,,,,,,,,,,,,
+treePlantedKitsuneKeyaki1mDesc,blocks,Block,,,Plant on dirt to grow a keyaki tree.,,,,,,,,,,,,,,
