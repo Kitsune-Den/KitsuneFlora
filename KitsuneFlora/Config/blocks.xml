@@ -64,8 +64,8 @@
             <property name="PlantGrowing.Next" value="treeKitsuneSakura"/>
             <property name="DescriptionKey" value="treePlantedKitsuneSakura1mDesc"/>
             <property name="Material" value="Mplants"/>
-            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
-            <property name="ModelOffset" value="0,-0.2,0"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
             <property name="StabilitySupport" value="false"/>
@@ -97,8 +97,8 @@
             <property name="PlantGrowing.Next" value="treeKitsuneSakuraLeaf"/>
             <property name="DescriptionKey" value="treePlantedKitsuneSakuraLeaf1mDesc"/>
             <property name="Material" value="Mplants"/>
-            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
-            <property name="ModelOffset" value="0,-0.2,0"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraLeafSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
             <property name="StabilitySupport" value="false"/>
@@ -133,8 +133,8 @@
             <property name="PlantGrowing.Next" value="treeKitsuneKeyaki"/>
             <property name="DescriptionKey" value="treePlantedKitsuneKeyaki1mDesc"/>
             <property name="Material" value="Mplants"/>
-            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
-            <property name="ModelOffset" value="0,-0.2,0"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneKeyakiSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
             <property name="StabilitySupport" value="false"/>
@@ -145,6 +145,143 @@
             <property name="ActivationDistance" value="4"/>
             <dropextendsoff/>
             <drop event="Harvest" name="treePlantedKitsuneKeyaki1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             DOGWOOD (Hanamizuki) — pink flowering variant
+             ============================================================
+             Small ornamental tree. Two mature variants (pink + white,
+             reframed as bloom + leaf) share a single seed, matching
+             the sakura pattern.
+        -->
+        <block name="treeKitsuneDogwood">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneDogwoodRoot"/>
+            <property name="MultiBlockDim" value="1,6,1"/>
+            <property name="BigDecorationRadius" value="3"/>
+            <drop event="Harvest" name="resourceWood" count="22" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneDogwood1m" count="1"/>
+            <property name="CustomIcon" value="treeKitsuneDogwood"/>
+            <property name="EconomicValue" value="34"/>
+        </block>
+
+        <!-- ============================================================
+             DOGWOOD — white flowering variant (leaf-slot)
+        -->
+        <block name="treeKitsuneDogwoodLeaf">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneDogwoodLeafRoot"/>
+            <property name="MultiBlockDim" value="1,6,1"/>
+            <property name="BigDecorationRadius" value="3"/>
+            <drop event="Harvest" name="resourceWood" count="22" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneDogwood1m" count="1"/>
+            <property name="CustomIcon" value="treeKitsuneDogwoodLeaf"/>
+            <property name="EconomicValue" value="30"/>
+        </block>
+
+        <block name="treePlantedKitsuneDogwood1m">
+            <property name="Extends" value="treeMasterGrowing" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneDogwood"/>
+            <property name="DescriptionKey" value="treePlantedKitsuneDogwood1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneDogwoodSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="13"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneDogwood1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             PLANE TREE (Suzukake-no-ki) — large sycamore with palmate
+             ============================================================
+             maple-shaped leaves. The Asset Store pack's "Plane_tree_
+             roadside" prefab. NOT a ginkgo despite earlier assumption.
+
+             A future ginkgo asset would slot in as `treeKitsuneGinko`
+             using the parked icons treeKitsuneGinko.png + ginko-seed
+             art. Plane tree owns its own block ID here.
+        -->
+        <block name="treeKitsunePlaneTree">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePlaneTreeRoot"/>
+            <property name="MultiBlockDim" value="1,10,1"/>
+            <property name="BigDecorationRadius" value="4"/>
+            <drop event="Harvest" name="resourceWood" count="45" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsunePlaneTree1m" count="1"/>
+            <property name="CustomIcon" value="treeKitsunePlaneTree"/>
+            <property name="EconomicValue" value="40"/>
+        </block>
+
+        <block name="treePlantedKitsunePlaneTree1m">
+            <property name="Extends" value="treeMasterGrowing" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsunePlaneTree"/>
+            <property name="DescriptionKey" value="treePlantedKitsunePlaneTree1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePlaneTreeSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="16"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsunePlaneTree1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             AZALEA (Tsutsuji) — small flowering shrub
+             ============================================================
+             Smaller than the other trees: short, bush-like. Reduced
+             MultiBlockDim and BigDecorationRadius accordingly. Drops
+             less wood (it's a shrub).
+        -->
+        <block name="treeKitsuneAzalea">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneAzaleaRoot"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="2"/>
+            <drop event="Harvest" name="resourceWood" count="8" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneAzalea1m" count="1"/>
+            <property name="CustomIcon" value="treeKitsuneAzalea"/>
+            <property name="EconomicValue" value="22"/>
+        </block>
+
+        <block name="treePlantedKitsuneAzalea1m">
+            <property name="Extends" value="treeMasterGrowing" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneAzalea"/>
+            <property name="DescriptionKey" value="treePlantedKitsuneAzalea1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneAzaleaSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="10"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneAzalea1m" count="1" tag="lumberjackHarvest"/>
         </block>
 
     </append>

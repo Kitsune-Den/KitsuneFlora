@@ -17,12 +17,17 @@
         <item name="treePlantedKitsuneSakura1m"/>
         <item name="treePlantedKitsuneSakuraLeaf1m"/>
         <item name="treePlantedKitsuneKeyaki1m"/>
+        <item name="treePlantedKitsuneDogwood1m"/>
+        <item name="treePlantedKitsunePlaneTree1m"/>
+        <item name="treePlantedKitsuneAzalea1m"/>
     </append>
 
     <append xpath="/lootcontainers/lootgroup[@name='seedsNoFlowers']">
         <item name="treePlantedKitsuneSakuraLeaf1m" count="1,3"/>
         <item name="treePlantedKitsuneKeyaki1m"     count="1,3"/>
-        <!-- Sakura-in-bloom is omitted from "no flowers" group on purpose -->
+        <item name="treePlantedKitsunePlaneTree1m"      count="1,3"/>
+        <!-- Sakura/Dogwood/Azalea (the flowering ones) omitted from
+             the "no flowers" group on purpose. -->
     </append>
 
 </configs>

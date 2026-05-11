@@ -1,42 +1,81 @@
+<p align="center">
+  <img src="docs/social.png" alt="KitsuneFlora" width="640"/>
+</p>
+
 # KitsuneFlora
 
-Standalone 7DTD V2.6 mod adding Japanese-themed trees: cherry blossom (sakura), sakura with leaves, and keyaki (Japanese zelkova).
+![version](https://img.shields.io/badge/version-0.3.0-purple)
+![7DTD](https://img.shields.io/badge/7DTD-V2.6-orange)
+![status](https://img.shields.io/badge/status-working-brightgreen)
+[![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
+![code](https://img.shields.io/badge/code-MIT--style-blue)
+![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
+
+Standalone 7 Days to Die V2.6 mod adding five Japanese-themed trees: **sakura** (cherry blossom — bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), and **azalea** (tsutsuji). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
 
 ## Status
 
-**🌸 v0.2 WORKING 2026-05-11.** Trees are solid, chop-able, drop wood + seed, plant via seed block. Now integrated into biome RWG, vanilla loot, and trader stock. First documented V2.6 working pattern for custom-mesh blocks via mod bundle.
+**🌸 v0.3 WORKING — 2026-05-11.**
+
+- 7 mature tree blocks + 6 seed/sapling blocks (sakura and dogwood share seeds across variants)
+- 13 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle (7 mature + 6 small/sapling-stage)
+- Biome decoration (pine_forest, rare-to-common), farm loot drops, trader stock
+- First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
 
 ## Layout
 
 ```
-KitsuneFlora/
+KitsuneFlora/                      ← what ships in the mod
 ├── ModInfo.xml
 ├── Config/
-│   ├── blocks.xml          6 block defs: 3 mature trees + 3 seeds
-│   ├── biomes.xml          inject 3 trees as pine_forest decoration
-│   ├── loot.xml            add 3 seeds to vanilla `seeds` + `seedsNoFlowers` groups
-│   ├── traders.xml         add 3 seeds to shared `seeds` trader group
-│   └── Localization.txt    English display names
+│   ├── blocks.xml                 13 block defs: 7 mature trees + 6 seeds (template + concrete)
+│   ├── biomes.xml                 inject all 7 trees into pine_forest decoration list
+│   ├── loot.xml                   add 6 seeds to vanilla `seeds` / `seedsNoFlowers` groups
+│   ├── traders.xml                add 6 seeds to shared `seeds` trader_item_group
+│   └── Localization.txt           English display names + descriptions for all blocks
 ├── Resources/
 │   └── Bundles/
-│       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity
+│       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~85 MB)
 └── UIAtlases/
-    └── ItemIconAtlas/      6 PNG icons (3 trees + 3 seeds)
+    └── ItemIconAtlas/             13 PNGs only — exactly one per CustomIcon-referencing block
+
+Workspace/                         ← dev artifacts, NOT shipped in the mod
+├── WrapTreePrefabs.cs             Unity Editor script: wraps Asset Store prefabs into bundle-safe wrappers + applies scale + strips inner colliders
+└── IconSources/                   Original kebab-case PNGs (sakura-bloom.png etc.) + parked icons for the future ginko slot
 ```
 
-## Vanilla pattern: seeds = blocks, not items
+Unity workspace lives at `C:\Users\darab\Unity Projects\RedFoxAnimated\`. Asset Store source FBX files are imported there and never enter this repo.
 
-Vanilla 7DTD doesn't have separate "seed items" — for trees AND crops, the planted block (`treePlantedOak1m`, `plantedCorn1`) IS the inventory item. `CreativeMode="Player"` makes it placeable; a Harvest drop makes it pickup-able. We follow that pattern: the `treePlantedKitsuneXxx1m` blocks double as the seeds players hold.
-
-Asset source: [Roadside Trees](https://assetstore.unity.com) Unity Asset Store package, imported into the shared `RedFoxAnimated` Unity project.
+**Icon discipline:** the `UIAtlases/ItemIconAtlas/` folder is treated as a "shipped artifact" — only PNGs whose filename matches a block's `CustomIcon` value live there. Source masters (the kebab-case originals) live in `Workspace/IconSources/` so they survive in the repo without bloating the mod's runtime atlas.
 
 ## Block roster
 
-| Block | Sapling | Bundle ref |
-|---|---|---|
-| `treeKitsuneSakura` | `treePlantedKitsuneSakura1m` | `?CherryBlossom_flower_roadside_1.prefab` |
-| `treeKitsuneSakuraLeaf` | `treePlantedKitsuneSakuraLeaf1m` | `?CherryBlossom_leaf_roadside_1.prefab` |
-| `treeKitsuneKeyaki` | `treePlantedKitsuneKeyaki1m` | `?Keyaki_L.prefab` |
+| Tree | Mature block(s) | Seed block | Bundle wrappers (mature / small) |
+|---|---|---|---|
+| Sakura | `treeKitsuneSakura`, `treeKitsuneSakuraLeaf` | `treePlantedKitsuneSakura1m`, `treePlantedKitsuneSakuraLeaf1m` | `*Root`, `*LeafRoot` / `*SmallRoot`, `*LeafSmallRoot` |
+| Keyaki | `treeKitsuneKeyaki` | `treePlantedKitsuneKeyaki1m` | `treeKitsuneKeyakiRoot` / `*KeyakiSmallRoot` |
+| Dogwood | `treeKitsuneDogwood`, `treeKitsuneDogwoodLeaf` | `treePlantedKitsuneDogwood1m` (shared) | `*DogwoodRoot`, `*DogwoodLeafRoot` / `*DogwoodSmallRoot` |
+| Plane tree | `treeKitsunePlaneTree` | `treePlantedKitsunePlaneTree1m` | `*PlaneTreeRoot` / `*PlaneTreeSmallRoot` |
+| Azalea | `treeKitsuneAzalea` | `treePlantedKitsuneAzalea1m` | `*AzaleaRoot` / `*AzaleaSmallRoot` |
+
+**Parked for a future build:** a `treeKitsuneGinko` block + matching `ginko.png` / `ginko-seed.png` icons sit unused, waiting for a real ginkgo asset (the RoadsideTrees pack labels the plane tree confusingly but it isn't actually a ginkgo).
+
+## Vanilla pattern: seeds = blocks, not items
+
+Vanilla 7DTD doesn't have separate "seed items" — for trees AND crops, the planted block (`treePlantedOak1m`, `plantedCorn1`) IS the inventory item. `CreativeMode="Player"` makes it placeable; a Harvest drop makes it pickup-able. KitsuneFlora follows this pattern: the `treePlantedKitsuneXxx1m` blocks double as the seeds players hold.
+
+The seed-stage block uses a **small variant of the same tree** from the bundle (`treeKitsuneSakuraSmallRoot` etc., wrapped at 0.35 localScale) so a freshly-planted seed appears as a recognizable young tree rather than the generic vanilla oak sapling mesh.
+
+## License & asset attribution
+
+**Tree meshes** are from the **"Roadside Trees"** package on the Unity Asset Store, purchased under one developer seat. They're bundled into the compiled `KitsuneFlora.unity3d` file as part of this mod (a derivative work, permitted under the Unity Asset Store EULA). Specifically:
+
+- ✅ The compiled `.unity3d` bundle ships with the mod.
+- ❌ Source FBX / texture files from the Asset Store pack are **NOT** redistributed. The `Assets/RoadsideTrees/` Unity import folder is `.gitignore`'d and never committed.
+- ❌ You cannot extract the source FBX from the bundle and reuse it elsewhere.
+- If you want to extend this mod with additional tree assets from the same pack, you'll need to purchase your own copy from the Unity Asset Store.
+
+**Mod code, XML, custom textures, and icons** © AdaInTheLab (adainthelab@gmail.com), free to fork and modify under reasonable use. Credit appreciated but not required.
 
 ## The bug nobody else online has documented
 
@@ -47,26 +86,56 @@ Asset Store FBX-derived prefabs (Roadside Trees, etc.) share their **root GameOb
 
 When 7DTD's bundle loader resolves `#@modfolder:Bundle.unity3d?PrefabName`, it picks the FIRST GameObject with that name — the empty FBX wrapper. No collider → walk-through, no LODGroup → mesh missing in some draws.
 
-## The fix
+### The fix
 
-Wrap each prefab in a **NEW outer GameObject** with a unique filename (e.g. `treeKitsuneSakuraRoot.prefab`) that doesn't collide with the FBX's auto-name. The new outer becomes the bundle root for that asset. Procedure:
+Wrap each prefab in a **NEW outer GameObject** with a unique filename (e.g. `treeKitsuneSakuraRoot.prefab`) that doesn't collide with the FBX's auto-name. The new outer becomes the bundle root for that asset.
 
-1. Editor script (`Workspace/WrapTreePrefabs.cs`) creates wrapper prefabs in `Assets/KitsuneTreeWrappers/` containing the original prefab as a child + a new `BoxCollider` on the wrapper root.
-2. Update the OCB Bundle asset's Objects list to point at the new wrapper prefabs.
-3. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot` etc.).
-4. Re-export bundle.
+Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 
-Verification with UnityPy: bundle's top-level GameObjects should include `treeKitsuneSakuraRoot` (Transform + BoxCollider) and `treeKitsuneSakuraLeafRoot`/`treeKitsuneKeyakiRoot` similarly. The old FBX-named GameObjects may still be present but are no longer referenced by XML.
+1. Editor script creates wrapper prefabs in `Assets/KitsuneTreeWrappers/` containing the original prefab as a child + a new `BoxCollider` on the wrapper root.
+2. Inner colliders are stripped (Asset Store prefabs ship with their own trunk capsules — leaving them in causes HP-bar flicker on chop because the raycast bounces between overlapping colliders).
+3. Small/sapling variants get a 0.35 localScale applied to the inner so they read as saplings rather than full trees.
+4. Update the OCB Bundle asset's Objects list to point at the new wrapper prefabs.
+5. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot`, etc.).
+6. Re-export bundle.
 
-## Other XML lessons learned along the way (all kept in current config)
+Verification with UnityPy: bundle's top-level GameObjects should include all 13 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
 
-- Two-step XML pattern (template extending `treeMaster` with vanilla path → tree extending template with mod-bundle path) is the correct V2.6 inheritance flow per War3zuk FarmLife (Nexus 2108).
-- `Material="MtreeWoodLarge"` explicit override.
-- No re-stated `Path` or `Collide` (let inheritance handle).
-- Bundle-side BoxCollider on the wrapper root.
-- No `.prefab` extension on bundle asset names (`?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`).
+## Other V2.6 modding lessons baked into this mod
 
-## Author / License
+- **Two-step XML pattern** (template extending `treeMaster` with a *vanilla* model path → tree extending the template with the mod-bundle path) is the correct V2.6 inheritance flow per War3zuk FarmLife (Nexus mod 2108). Without the vanilla-pointed template at the root, terrain block registration fails and you get walk-through trees.
+- **`Material="MtreeWoodLarge"` explicit override** — needed even though parent sets it, V2.6 inheritance occasionally loses the value.
+- **No re-stated `Path` or `Collide`** — let inheritance handle, restating breaks vanilla logic.
+- **Bundle-side BoxCollider on the wrapper root** — see "The fix" above.
+- **No `.prefab` extension on bundle asset names** — `?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`.
+- **Hitbox sizing** — keep collider radius ≤ 0.5m on 1×N×1 MultiBlockDim trees, otherwise the wider collider overlaps neighboring blocks and HP overlay flickers.
 
-Author: Ada (adainthelab@gmail.com)
+## Tests
+
+XML-only mods don't have classic unit tests, but they have plenty of *cross-references* that can rot silently: rename a block in `blocks.xml` and forget to update `biomes.xml`, ship a CustomIcon without the matching PNG, add a block and forget its Localization entry. `tests/test_validation.py` (pytest, 14 cases) catches all of that before the game does:
+
+```bash
+pip install -r tests/requirements.txt
+pytest -v tests/
+```
+
+What it checks:
+
+- All XML files parse cleanly
+- Every `<drop event="Destroy">` and `PlantGrowing.Next` references a block that exists
+- Every `CustomIcon` value has a matching PNG in `UIAtlases/ItemIconAtlas/`
+- Every concrete block has both a name and a description entry in `Localization.txt`
+- `biomes.xml` / `loot.xml` / `traders.xml` only reference blocks that exist
+- `ItemIconAtlas/` contains no orphan PNGs (source masters live in `Workspace/IconSources/` instead — see Icon discipline note above)
+- `ModInfo.xml` `<Version>` agrees with the `vX.Y WORKING` line in this README
+
+GitHub Actions runs the same suite on every push — the `tests` badge above is the latest result.
+
+## Sync workflow (dev → game)
+
+Edits land in `C:\Users\darab\IdeaProjects\KitsuneFlora\KitsuneFlora\` and need to be copied to the game's mod folder `F:\7D2D\Custom\TestingDen\Mods\KitsuneFlora\` for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the IdeaProjects path, then copied across.
+
+## Author / Repo
+
+Author: AdaInTheLab (adainthelab@gmail.com)
 Repo: standalone, may eventually be folded into KitsuneCompanion.

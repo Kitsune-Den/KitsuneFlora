@@ -11,3 +11,8 @@ desktop.ini
 .vs/
 .vscode/
 .idea/
+
+# --- Python test artifacts ---
+__pycache__/
+*.pyc
+.pytest_cache/
