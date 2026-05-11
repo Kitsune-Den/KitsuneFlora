@@ -47,7 +47,8 @@ public static class WrapTreePrefabs
         ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodRoot",         0.4f, 6f,   3f,    1f),
         ("Assets/RoadsideTrees/Prefabs/Dogwood_white.prefab",                   "treeKitsuneDogwoodLeafRoot",     0.4f, 6f,   3f,    1f),
         ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeRoot",       0.5f, 10f,  5f,    1f),
-        ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                     "treeKitsuneAzaleaRoot",          0.4f, 2f,   1f,    1f),
+        // Azalea_wide parked ~ flat-bush mesh fights with 7DTD voxel rendering
+        // ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                  "treeKitsuneAzaleaRoot",          0.6f, 2.5f, 1.25f, 1f),
 
         // ============================================================
         // Small variants ~ wrapped at 0.35 localScale to read as saplings.
@@ -66,7 +67,7 @@ public static class WrapTreePrefabs
         // ============================================================
         ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodSmallRoot",    0.5f, 2.1f, 1.05f, 0.35f),
         ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeSmallRoot",  0.5f, 3.5f, 1.75f, 0.35f),
-        ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                     "treeKitsuneAzaleaSmallRoot",     0.4f, 0.7f, 0.35f, 0.35f),
+        // ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                  "treeKitsuneAzaleaSmallRoot",     0.4f, 0.4f, 0.2f,  0.35f),
     };
 
     [MenuItem("Tools/Kitsune/Wrap Tree Prefabs With Unique Roots")]

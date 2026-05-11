@@ -23,7 +23,6 @@
         <decoration type="block" blockname="treeKitsuneDogwood"     prob=".002" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneDogwoodLeaf" prob=".003" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsunePlaneTree"   prob=".003" rotatemax="7"/>
-        <decoration type="block" blockname="treeKitsuneAzalea"      prob=".006" rotatemax="7"/>
     </append>
 
 </configs>

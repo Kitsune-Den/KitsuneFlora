@@ -19,7 +19,6 @@
         <item name="treePlantedKitsuneKeyaki1m"/>
         <item name="treePlantedKitsuneDogwood1m"/>
         <item name="treePlantedKitsunePlaneTree1m"/>
-        <item name="treePlantedKitsuneAzalea1m"/>
     </append>
 
     <append xpath="/lootcontainers/lootgroup[@name='seedsNoFlowers']">

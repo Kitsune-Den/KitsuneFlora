@@ -11,14 +11,14 @@
 ![code](https://img.shields.io/badge/code-MIT--style-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
-Standalone 7 Days to Die V2.6 mod adding five Japanese-themed trees: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), and **azalea** (tsutsuji). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
+Standalone 7 Days to Die V2.6 mod adding four Japanese-themed trees: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), and **plane tree** (suzukake-no-ki). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
 
 ## Status
 
 **🌸 v0.3 WORKING ~ 2026-05-11.**
 
-- 7 mature tree blocks + 6 seed/sapling blocks (sakura and dogwood share seeds across variants)
-- 13 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle (7 mature + 6 small/sapling-stage)
+- 6 mature tree blocks + 5 seed/sapling blocks (sakura and dogwood each share one seed across their two variants)
+- 11 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle (6 mature + 5 small/sapling-stage)
 - Biome decoration (pine_forest, rare-to-common), farm loot drops, trader stock
 - First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
 
@@ -28,16 +28,16 @@ Standalone 7 Days to Die V2.6 mod adding five Japanese-themed trees: **sakura** 
 KitsuneFlora/                      ← what ships in the mod
 ├── ModInfo.xml
 ├── Config/
-│   ├── blocks.xml                 13 block defs: 7 mature trees + 6 seeds (template + concrete)
-│   ├── biomes.xml                 inject all 7 trees into pine_forest decoration list
-│   ├── loot.xml                   add 6 seeds to vanilla `seeds` / `seedsNoFlowers` groups
-│   ├── traders.xml                add 6 seeds to shared `seeds` trader_item_group
+│   ├── blocks.xml                 11 block defs: 6 mature trees + 5 seeds (plus a template)
+│   ├── biomes.xml                 inject all 6 mature trees into pine_forest decoration list
+│   ├── loot.xml                   add 5 seeds to vanilla `seeds` / `seedsNoFlowers` groups
+│   ├── traders.xml                add 5 seeds to shared `seeds` trader_item_group
 │   └── Localization.txt           English display names + descriptions for all blocks
 ├── Resources/
 │   └── Bundles/
 │       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~85 MB)
 └── UIAtlases/
-    └── ItemIconAtlas/             13 PNGs only ~ exactly one per CustomIcon-referencing block
+    └── ItemIconAtlas/             11 PNGs only ~ exactly one per CustomIcon-referencing block
 
 Workspace/                         ← dev artifacts, NOT shipped in the mod
 ├── WrapTreePrefabs.cs             Unity Editor script: wraps Asset Store prefabs into bundle-safe wrappers + applies scale + strips inner colliders
@@ -56,9 +56,11 @@ Unity workspace lives in a sibling `RedFoxAnimated` Unity project (path is local
 | Keyaki | `treeKitsuneKeyaki` | `treePlantedKitsuneKeyaki1m` | `treeKitsuneKeyakiRoot` / `*KeyakiSmallRoot` |
 | Dogwood | `treeKitsuneDogwood`, `treeKitsuneDogwoodLeaf` | `treePlantedKitsuneDogwood1m` (shared) | `*DogwoodRoot`, `*DogwoodLeafRoot` / `*DogwoodSmallRoot` |
 | Plane tree | `treeKitsunePlaneTree` | `treePlantedKitsunePlaneTree1m` | `*PlaneTreeRoot` / `*PlaneTreeSmallRoot` |
-| Azalea | `treeKitsuneAzalea` | `treePlantedKitsuneAzalea1m` | `*AzaleaRoot` / `*AzaleaSmallRoot` |
 
-**Parked for a future build:** a `treeKitsuneGinko` block + matching `ginko.png` / `ginko-seed.png` icons sit unused, waiting for a real ginkgo asset (the RoadsideTrees pack labels the plane tree confusingly but it isn't actually a ginkgo).
+**Parked for a future build:**
+
+- `treeKitsuneGinko` ~ icons (`ginko.png` / `ginko-seed.png`) sit in `Workspace/IconSources/` waiting for a real ginkgo asset. The RoadsideTrees pack labels its plane tree confusingly but it isn't a ginkgo.
+- `treeKitsuneAzalea` ~ the Azalea_wide.prefab from the RoadsideTrees pack is too flat-and-wide to play nicely with 7DTD's voxel system: hit registration fights the tree-shape collider when MultiBlockDim is small, and rendering breaks down when MultiBlockDim is too compact. Icons (`azalea.png` / `azalea-seed.png`) parked in `Workspace/IconSources/` until a better-suited asset or shrub-pattern lands.
 
 ## Vanilla pattern: seeds = blocks, not items
 
@@ -99,7 +101,7 @@ Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 5. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot`, etc.).
 6. Re-export bundle.
 
-Verification with UnityPy: bundle's top-level GameObjects should include all 13 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
+Verification with UnityPy: bundle's top-level GameObjects should include all 11 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
 
 ## Other V2.6 modding lessons baked into this mod
 
