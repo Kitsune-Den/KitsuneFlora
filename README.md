@@ -44,7 +44,7 @@ Workspace/                         ← dev artifacts, NOT shipped in the mod
 └── IconSources/                   Original kebab-case PNGs (sakura-bloom.png etc.) + parked icons for the future ginko slot
 ```
 
-Unity workspace lives at `C:\Users\darab\Unity Projects\RedFoxAnimated\`. Asset Store source FBX files are imported there and never enter this repo.
+Unity workspace lives in a sibling `RedFoxAnimated` Unity project (path is local to the developer's machine). Asset Store source FBX files are imported there and never enter this repo.
 
 **Icon discipline:** the `UIAtlases/ItemIconAtlas/` folder is treated as a "shipped artifact" ~ only PNGs whose filename matches a block's `CustomIcon` value live there. Source masters (the kebab-case originals) live in `Workspace/IconSources/` so they survive in the repo without bloating the mod's runtime atlas.
 
@@ -133,7 +133,7 @@ GitHub Actions runs the same suite on every push ~ the `tests` badge above is th
 
 ## Sync workflow (dev → game)
 
-Edits land in `C:\Users\darab\IdeaProjects\KitsuneFlora\KitsuneFlora\` and need to be copied to the game's mod folder `F:\7D2D\Custom\TestingDen\Mods\KitsuneFlora\` for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the IdeaProjects path, then copied across.
+Edits land in `<repo>/KitsuneFlora/` and need to be copied to the game's `Mods/KitsuneFlora/` folder for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the repo's `Resources/Bundles/` path, then copied across to the game folder.
 
 ## Author / Repo
 
