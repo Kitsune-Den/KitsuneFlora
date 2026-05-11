@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configs>
+
+    <!-- ============================================================
+         KITSUNE FLORA — Trader stock
+         ============================================================
+         Add the three Kitsune seeds to the shared `seeds` trader item
+         group. Every trader that includes <item group="seeds" .../>
+         will then have a chance to stock them.
+
+         Reference: F:/72D2D-Server/Data/Config/traders.xml line ~801
+    -->
+    <append xpath="//trader_item_group[@name='seeds']">
+        <item name="treePlantedKitsuneSakura1m"/>
+        <item name="treePlantedKitsuneSakuraLeaf1m"/>
+        <item name="treePlantedKitsuneKeyaki1m"/>
+    </append>
+
+</configs>

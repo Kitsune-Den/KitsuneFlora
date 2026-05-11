@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configs>
+
+    <!-- ============================================================
+         KITSUNE FLORA — Loot integration
+         ============================================================
+         Add the three Kitsune seeds into vanilla seed lootgroups so
+         they spawn naturally in farm crates, garden lockers, and
+         anywhere else that references the `seeds` group.
+
+         The block ID is the same as the planted block (V2.6 vanilla
+         convention — saplings double as seeds). See README.
+
+         Reference: F:/72D2D-Server/Data/Config/loot.xml line ~3944
+    -->
+    <append xpath="/lootcontainers/lootgroup[@name='seeds']">
+        <item name="treePlantedKitsuneSakura1m"/>
+        <item name="treePlantedKitsuneSakuraLeaf1m"/>
+        <item name="treePlantedKitsuneKeyaki1m"/>
+    </append>
+
+    <append xpath="/lootcontainers/lootgroup[@name='seedsNoFlowers']">
+        <item name="treePlantedKitsuneSakuraLeaf1m" count="1,3"/>
+        <item name="treePlantedKitsuneKeyaki1m"     count="1,3"/>
+        <!-- Sakura-in-bloom is omitted from "no flowers" group on purpose -->
+    </append>
+
+</configs>

@@ -4,7 +4,7 @@ Standalone 7DTD V2.6 mod adding Japanese-themed trees: cherry blossom (sakura), 
 
 ## Status
 
-**🌸 WORKING 2026-05-10.** Trees are solid, chop-able, drop wood + sapling, plant via sapling block. First documented V2.6 working pattern for custom-mesh blocks via mod bundle.
+**🌸 v0.2 WORKING 2026-05-11.** Trees are solid, chop-able, drop wood + seed, plant via seed block. Now integrated into biome RWG, vanilla loot, and trader stock. First documented V2.6 working pattern for custom-mesh blocks via mod bundle.
 
 ## Layout
 
@@ -12,14 +12,21 @@ Standalone 7DTD V2.6 mod adding Japanese-themed trees: cherry blossom (sakura), 
 KitsuneFlora/
 ├── ModInfo.xml
 ├── Config/
-│   ├── blocks.xml          6 block defs: 3 mature trees + 3 saplings
+│   ├── blocks.xml          6 block defs: 3 mature trees + 3 seeds
+│   ├── biomes.xml          inject 3 trees as pine_forest decoration
+│   ├── loot.xml            add 3 seeds to vanilla `seeds` + `seedsNoFlowers` groups
+│   ├── traders.xml         add 3 seeds to shared `seeds` trader group
 │   └── Localization.txt    English display names
 ├── Resources/
 │   └── Bundles/
 │       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity
 └── UIAtlases/
-    └── ItemIconAtlas/      Vanilla oak placeholder icons (replace later)
+    └── ItemIconAtlas/      6 PNG icons (3 trees + 3 seeds)
 ```
+
+## Vanilla pattern: seeds = blocks, not items
+
+Vanilla 7DTD doesn't have separate "seed items" — for trees AND crops, the planted block (`treePlantedOak1m`, `plantedCorn1`) IS the inventory item. `CreativeMode="Player"` makes it placeable; a Harvest drop makes it pickup-able. We follow that pattern: the `treePlantedKitsuneXxx1m` blocks double as the seeds players hold.
 
 Asset source: [Roadside Trees](https://assetstore.unity.com) Unity Asset Store package, imported into the shared `RedFoxAnimated` Unity project.
 
