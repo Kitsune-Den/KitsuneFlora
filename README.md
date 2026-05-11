@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.3.2-purple)
+![version](https://img.shields.io/badge/version-0.3.3-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
