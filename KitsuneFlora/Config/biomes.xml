@@ -16,7 +16,7 @@
          Reference: F:/72D2D-Server/Data/Config/biomes.xml line ~402
          (subbiome noise=".014, 0, .38" under biome name="pine_forest")
     -->
-    <append xpath="/biomes/biome[@name='pine_forest']/subbiome[@noise='.014, 0, .38']/decorations">
+    <append xpath="/worldgeneration/biomes/biome[@name='pine_forest']/subbiome[@noise='.014, 0, .38']/decorations">
         <decoration type="block" blockname="treeKitsuneSakura"      prob=".002" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneSakuraLeaf"  prob=".003" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneKeyaki"      prob=".004" rotatemax="7"/>
