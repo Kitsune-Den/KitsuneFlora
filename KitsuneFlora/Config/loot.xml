@@ -2,14 +2,14 @@
 <configs>
 
     <!-- ============================================================
-         KITSUNE FLORA — Loot integration
+         KITSUNE FLORA ~ Loot integration
          ============================================================
          Add the three Kitsune seeds into vanilla seed lootgroups so
          they spawn naturally in farm crates, garden lockers, and
          anywhere else that references the `seeds` group.
 
          The block ID is the same as the planted block (V2.6 vanilla
-         convention — saplings double as seeds). See README.
+         convention ~ saplings double as seeds). See README.
 
          Reference: F:/72D2D-Server/Data/Config/loot.xml line ~3944
     -->

@@ -2,7 +2,7 @@
 <configs>
 
     <!-- ============================================================
-         KITSUNE FLORA — Japanese-themed trees
+         KITSUNE FLORA ~ Japanese-themed trees
          ============================================================
          Three trees from the RoadsideTrees Unity asset, bundled via
          OCB UnityAssetExporter into Resources/Bundles/KitsuneFlora.unity3d.
@@ -46,7 +46,7 @@
         </block>
 
         <!-- ============================================================
-             SAKURA (Cherry Blossom in flower) — iconic pink/white blooms
+             SAKURA (Cherry Blossom in flower) ~ iconic pink/white blooms
         -->
         <block name="treeKitsuneSakura">
             <property name="Extends" value="treeKitsuneMaster"/>
@@ -112,7 +112,7 @@
         </block>
 
         <!-- ============================================================
-             KEYAKI (Japanese Zelkova) — large, broad-canopy shade tree
+             KEYAKI (Japanese Zelkova) ~ large, broad-canopy shade tree
         -->
         <block name="treeKitsuneKeyaki">
             <property name="Extends" value="treeKitsuneMaster"/>
@@ -148,7 +148,7 @@
         </block>
 
         <!-- ============================================================
-             DOGWOOD (Hanamizuki) — pink flowering variant
+             DOGWOOD (Hanamizuki) ~ pink flowering variant
              ============================================================
              Small ornamental tree. Two mature variants (pink + white,
              reframed as bloom + leaf) share a single seed, matching
@@ -166,7 +166,7 @@
         </block>
 
         <!-- ============================================================
-             DOGWOOD — white flowering variant (leaf-slot)
+             DOGWOOD ~ white flowering variant (leaf-slot)
         -->
         <block name="treeKitsuneDogwoodLeaf">
             <property name="Extends" value="treeKitsuneMaster"/>
@@ -202,7 +202,7 @@
         </block>
 
         <!-- ============================================================
-             PLANE TREE (Suzukake-no-ki) — large sycamore with palmate
+             PLANE TREE (Suzukake-no-ki) ~ large sycamore with palmate
              ============================================================
              maple-shaped leaves. The Asset Store pack's "Plane_tree_
              roadside" prefab. NOT a ginkgo despite earlier assumption.
@@ -245,7 +245,7 @@
         </block>
 
         <!-- ============================================================
-             AZALEA (Tsutsuji) — small flowering shrub
+             AZALEA (Tsutsuji) ~ small flowering shrub
              ============================================================
              Smaller than the other trees: short, bush-like. Reduced
              MultiBlockDim and BigDecorationRadius accordingly. Drops

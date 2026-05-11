@@ -1,4 +1,4 @@
-// Editor script — drop at Assets/Editor/AddTreeColliders.cs
+// Editor script ~ drop at Assets/Editor/AddTreeColliders.cs
 //
 // Menu: Tools → Kitsune → Add Tree Colliders
 //

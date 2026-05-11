@@ -1,5 +1,5 @@
 """
-KitsuneFlora — cross-reference validation tests.
+KitsuneFlora ~ cross-reference validation tests.
 
 Catches the failure modes that don't show up until you load the world:
 - Block ID typos (block X references block Y that doesn't exist)
@@ -61,7 +61,7 @@ def concrete_blocks(block_names: set[str]) -> set[str]:
 
 @pytest.fixture(scope="session")
 def localization_keys() -> set[str]:
-    """First column of Localization.txt — every key defined."""
+    """First column of Localization.txt ~ every key defined."""
     keys: set[str] = set()
     with LOCALIZATION_TXT.open(encoding="utf-8") as f:
         reader = csv.reader(f)
@@ -114,14 +114,14 @@ def test_modlet_xml_parses(xml_path: Path):
 
 
 def test_every_destroy_drop_references_existing_block(blocks_root, block_names):
-    """A mature tree drops a seed on Destroy — that seed must exist."""
+    """A mature tree drops a seed on Destroy ~ that seed must exist."""
     missing: list[tuple[str, str]] = []
     for block in blocks_root.iter("block"):
         owner = block.get("name", "?")
         for drop in block.findall("drop"):
             if drop.get("event") == "Destroy":
                 target = drop.get("name", "")
-                # resourceWood, resource*, etc. are vanilla — only check
+                # resourceWood, resource*, etc. are vanilla ~ only check
                 # tree* / treePlanted* refs which should be ours.
                 if target.startswith(("treeKitsune", "treePlantedKitsune")):
                     if target not in block_names:
@@ -166,7 +166,7 @@ def test_every_custom_icon_has_png(blocks_root):
 
 def test_no_orphan_icons_in_atlas(concrete_blocks, blocks_root):
     """ItemIconAtlas should only contain icons referenced by a block."""
-    # Build the set of icons that are referenced — CustomIcon values for
+    # Build the set of icons that are referenced ~ CustomIcon values for
     # mature blocks, plus the block-name-matching PNG for seed blocks (since
     # they inherit CustomIcon via `param1` and the file is named after the
     # block itself).
@@ -178,7 +178,7 @@ def test_no_orphan_icons_in_atlas(concrete_blocks, blocks_root):
         props = block_props(block)
         icon = props.get("CustomIcon", name)  # seeds fall back to block name
         referenced.add(f"{icon}.png")
-        # seeds inherit param1="CustomIcon" pattern — the icon file is also
+        # seeds inherit param1="CustomIcon" pattern ~ the icon file is also
         # named after the block itself
         if name.startswith("treePlanted"):
             referenced.add(f"{name}.png")
@@ -244,12 +244,12 @@ def test_modinfo_version_matches_readme():
     modinfo_version = version_match.group(1)
 
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    # Status line: "🌸 v0.3 WORKING — 2026-05-11."
+    # Status line: "🌸 v0.3 WORKING ~ 2026-05-11."
     readme_match = re.search(r"v([\d.]+)\s+WORKING", readme)
     assert readme_match, "README.md has no 'vX.Y WORKING' status line"
     readme_version = readme_match.group(1)
 
-    # ModInfo is 3-part (0.3.0), README is 2-part shorthand (0.3) — compare prefixes.
+    # ModInfo is 3-part (0.3.0), README is 2-part shorthand (0.3) ~ compare prefixes.
     assert modinfo_version.startswith(readme_version), (
         f"ModInfo version {modinfo_version} doesn't match README status {readme_version}"
     )

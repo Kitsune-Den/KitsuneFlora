@@ -1,10 +1,10 @@
-// Editor script — drop at Assets/Editor/RenamePrefabRoots.cs
+// Editor script ~ drop at Assets/Editor/RenamePrefabRoots.cs
 //
 // Menu: Tools → Kitsune → Rename Tree Prefab Roots
 //
 // Asset Store FBX-based prefabs share their root GameObject name with
 // the FBX they're derived from. When OCB bundles the prefab, it ALSO
-// pulls in the FBX's auto-generated GameObject — so the bundle ends up
+// pulls in the FBX's auto-generated GameObject ~ so the bundle ends up
 // with TWO same-named root GameObjects: one empty (FBX) + one with our
 // LODGroup/BoxCollider (the actual prefab). 7DTD's bundle loader picks
 // the FBX one (empty) → walk-through.

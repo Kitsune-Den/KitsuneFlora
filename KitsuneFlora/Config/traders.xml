@@ -2,7 +2,7 @@
 <configs>
 
     <!-- ============================================================
-         KITSUNE FLORA — Trader stock
+         KITSUNE FLORA ~ Trader stock
          ============================================================
          Add the three Kitsune seeds to the shared `seeds` trader item
          group. Every trader that includes <item group="seeds" .../>
