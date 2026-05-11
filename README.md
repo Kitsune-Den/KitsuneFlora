@@ -11,11 +11,11 @@
 ![code](https://img.shields.io/badge/code-MIT--style-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
-Standalone 7 Days to Die V2.6 mod adding five Japanese-themed trees: **sakura** (cherry blossom — bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), and **azalea** (tsutsuji). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
+Standalone 7 Days to Die V2.6 mod adding five Japanese-themed trees: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), and **azalea** (tsutsuji). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
 
 ## Status
 
-**🌸 v0.3 WORKING — 2026-05-11.**
+**🌸 v0.3 WORKING ~ 2026-05-11.**
 
 - 7 mature tree blocks + 6 seed/sapling blocks (sakura and dogwood share seeds across variants)
 - 13 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle (7 mature + 6 small/sapling-stage)
@@ -37,7 +37,7 @@ KitsuneFlora/                      ← what ships in the mod
 │   └── Bundles/
 │       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~85 MB)
 └── UIAtlases/
-    └── ItemIconAtlas/             13 PNGs only — exactly one per CustomIcon-referencing block
+    └── ItemIconAtlas/             13 PNGs only ~ exactly one per CustomIcon-referencing block
 
 Workspace/                         ← dev artifacts, NOT shipped in the mod
 ├── WrapTreePrefabs.cs             Unity Editor script: wraps Asset Store prefabs into bundle-safe wrappers + applies scale + strips inner colliders
@@ -46,7 +46,7 @@ Workspace/                         ← dev artifacts, NOT shipped in the mod
 
 Unity workspace lives at `C:\Users\darab\Unity Projects\RedFoxAnimated\`. Asset Store source FBX files are imported there and never enter this repo.
 
-**Icon discipline:** the `UIAtlases/ItemIconAtlas/` folder is treated as a "shipped artifact" — only PNGs whose filename matches a block's `CustomIcon` value live there. Source masters (the kebab-case originals) live in `Workspace/IconSources/` so they survive in the repo without bloating the mod's runtime atlas.
+**Icon discipline:** the `UIAtlases/ItemIconAtlas/` folder is treated as a "shipped artifact" ~ only PNGs whose filename matches a block's `CustomIcon` value live there. Source masters (the kebab-case originals) live in `Workspace/IconSources/` so they survive in the repo without bloating the mod's runtime atlas.
 
 ## Block roster
 
@@ -62,7 +62,7 @@ Unity workspace lives at `C:\Users\darab\Unity Projects\RedFoxAnimated\`. Asset 
 
 ## Vanilla pattern: seeds = blocks, not items
 
-Vanilla 7DTD doesn't have separate "seed items" — for trees AND crops, the planted block (`treePlantedOak1m`, `plantedCorn1`) IS the inventory item. `CreativeMode="Player"` makes it placeable; a Harvest drop makes it pickup-able. KitsuneFlora follows this pattern: the `treePlantedKitsuneXxx1m` blocks double as the seeds players hold.
+Vanilla 7DTD doesn't have separate "seed items" ~ for trees AND crops, the planted block (`treePlantedOak1m`, `plantedCorn1`) IS the inventory item. `CreativeMode="Player"` makes it placeable; a Harvest drop makes it pickup-able. KitsuneFlora follows this pattern: the `treePlantedKitsuneXxx1m` blocks double as the seeds players hold.
 
 The seed-stage block uses a **small variant of the same tree** from the bundle (`treeKitsuneSakuraSmallRoot` etc., wrapped at 0.35 localScale) so a freshly-planted seed appears as a recognizable young tree rather than the generic vanilla oak sapling mesh.
 
@@ -81,10 +81,10 @@ The seed-stage block uses a **small variant of the same tree** from the bundle (
 
 Asset Store FBX-derived prefabs (Roadside Trees, etc.) share their **root GameObject name** with the FBX file. When OCB UnityAssetExporter bundles the prefab, the FBX's auto-generated GameObject of the same name comes along as a dependency. The bundle ends up with **TWO root GameObjects with the same name**:
 
-- The FBX's auto-GameObject — Transform only, no LODGroup, no collider (registered first)
-- The actual prefab — Transform + LODGroup + BoxCollider (the real one)
+- The FBX's auto-GameObject ~ Transform only, no LODGroup, no collider (registered first)
+- The actual prefab ~ Transform + LODGroup + BoxCollider (the real one)
 
-When 7DTD's bundle loader resolves `#@modfolder:Bundle.unity3d?PrefabName`, it picks the FIRST GameObject with that name — the empty FBX wrapper. No collider → walk-through, no LODGroup → mesh missing in some draws.
+When 7DTD's bundle loader resolves `#@modfolder:Bundle.unity3d?PrefabName`, it picks the FIRST GameObject with that name ~ the empty FBX wrapper. No collider → walk-through, no LODGroup → mesh missing in some draws.
 
 ### The fix
 
@@ -93,7 +93,7 @@ Wrap each prefab in a **NEW outer GameObject** with a unique filename (e.g. `tre
 Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 
 1. Editor script creates wrapper prefabs in `Assets/KitsuneTreeWrappers/` containing the original prefab as a child + a new `BoxCollider` on the wrapper root.
-2. Inner colliders are stripped (Asset Store prefabs ship with their own trunk capsules — leaving them in causes HP-bar flicker on chop because the raycast bounces between overlapping colliders).
+2. Inner colliders are stripped (Asset Store prefabs ship with their own trunk capsules ~ leaving them in causes HP-bar flicker on chop because the raycast bounces between overlapping colliders).
 3. Small/sapling variants get a 0.35 localScale applied to the inner so they read as saplings rather than full trees.
 4. Update the OCB Bundle asset's Objects list to point at the new wrapper prefabs.
 5. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot`, etc.).
@@ -104,11 +104,11 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 13 
 ## Other V2.6 modding lessons baked into this mod
 
 - **Two-step XML pattern** (template extending `treeMaster` with a *vanilla* model path → tree extending the template with the mod-bundle path) is the correct V2.6 inheritance flow per War3zuk FarmLife (Nexus mod 2108). Without the vanilla-pointed template at the root, terrain block registration fails and you get walk-through trees.
-- **`Material="MtreeWoodLarge"` explicit override** — needed even though parent sets it, V2.6 inheritance occasionally loses the value.
-- **No re-stated `Path` or `Collide`** — let inheritance handle, restating breaks vanilla logic.
-- **Bundle-side BoxCollider on the wrapper root** — see "The fix" above.
-- **No `.prefab` extension on bundle asset names** — `?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`.
-- **Hitbox sizing** — keep collider radius ≤ 0.5m on 1×N×1 MultiBlockDim trees, otherwise the wider collider overlaps neighboring blocks and HP overlay flickers.
+- **`Material="MtreeWoodLarge"` explicit override** ~ needed even though parent sets it, V2.6 inheritance occasionally loses the value.
+- **No re-stated `Path` or `Collide`** ~ let inheritance handle, restating breaks vanilla logic.
+- **Bundle-side BoxCollider on the wrapper root** ~ see "The fix" above.
+- **No `.prefab` extension on bundle asset names** ~ `?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`.
+- **Hitbox sizing** ~ keep collider radius ≤ 0.5m on 1×N×1 MultiBlockDim trees, otherwise the wider collider overlaps neighboring blocks and HP overlay flickers.
 
 ## Tests
 
@@ -126,10 +126,10 @@ What it checks:
 - Every `CustomIcon` value has a matching PNG in `UIAtlases/ItemIconAtlas/`
 - Every concrete block has both a name and a description entry in `Localization.txt`
 - `biomes.xml` / `loot.xml` / `traders.xml` only reference blocks that exist
-- `ItemIconAtlas/` contains no orphan PNGs (source masters live in `Workspace/IconSources/` instead — see Icon discipline note above)
+- `ItemIconAtlas/` contains no orphan PNGs (source masters live in `Workspace/IconSources/` instead ~ see Icon discipline note above)
 - `ModInfo.xml` `<Version>` agrees with the `vX.Y WORKING` line in this README
 
-GitHub Actions runs the same suite on every push — the `tests` badge above is the latest result.
+GitHub Actions runs the same suite on every push ~ the `tests` badge above is the latest result.
 
 ## Sync workflow (dev → game)
 
