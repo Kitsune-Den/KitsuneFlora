@@ -2,7 +2,7 @@
 <xml>
     <Name value="KitsuneFlora" />
     <DisplayName value="Kitsune Flora" />
-    <Version value="0.3.4" />
+    <Version value="0.3.5" />
     <Description value="Japanese-themed trees: sakura (bloom + leaf), keyaki, dogwood (pink + white), plane tree, and azalea. Plantable, harvestable, drop wood. Seeds visibly grow from sapling → mature mesh. Spawns in pine forest biome, drops in farm loot, stocked at traders. Standalone." />
     <Author value="AdaInTheLab" />
     <Website value="" />
