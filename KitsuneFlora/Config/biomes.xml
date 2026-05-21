@@ -23,6 +23,17 @@
         <decoration type="block" blockname="treeKitsuneDogwood"     prob=".002" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneDogwoodLeaf" prob=".003" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsunePlaneTree"   prob=".003" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBamboo"          prob=".005" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBlackPine"       prob=".005" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBoxwood"         prob=".009" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsunePaintedFern"     prob=".012" rotatemax="7"/>
+        <!-- Wild-grove variety: mixes ages + looks so groves aren't clones -->
+        <decoration type="block" blockname="treeKitsuneBambooWildSmall" prob=".006" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBambooWildMid"   prob=".005" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBambooWildBig"   prob=".004" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBoxwoodB"        prob=".009" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneBoxwoodC"        prob=".009" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsunePaintedFernB"    prob=".012" rotatemax="7"/>
     </append>
 
 </configs>

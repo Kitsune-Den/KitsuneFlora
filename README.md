@@ -4,22 +4,24 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.3.5-purple)
+![version](https://img.shields.io/badge/version-0.3.6-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
 ![code](https://img.shields.io/badge/code-MIT--style-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
-Standalone 7 Days to Die V2.6 mod adding four Japanese-themed trees: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), and **plane tree** (suzukake-no-ki). Trees are choppable, drop wood, and grow visibly from seed → sapling → mature using bundled custom meshes.
+Standalone 7 Days to Die V2.6 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced.
 
 ## Status
 
-**🌸 v0.3 WORKING ~ 2026-05-11.**
+**🌸 v0.3 WORKING ~ 2026-05-21.**
 
-- 6 mature tree blocks + 5 seed/sapling blocks (sakura and dogwood each share one seed across their two variants)
-- 11 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle (6 mature + 5 small/sapling-stage)
+- 27 block defs across two templates: 10 trees/plants in mature, growth-stage, wild-variety and seed forms
+- 25 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
 - Biome decoration (pine_forest, rare-to-common), farm loot drops, trader stock
+- Bamboo + black pine grow through true three-stage meshes; bamboo, boxwood and ferns plant adjacent for dense groves and hedges
+- Foliage sways with a custom vertex-wind shader; saplings sit still
 - First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
 
 ## Layout
@@ -28,14 +30,14 @@ Standalone 7 Days to Die V2.6 mod adding four Japanese-themed trees: **sakura** 
 KitsuneFlora/                      ← what ships in the mod
 ├── ModInfo.xml
 ├── Config/
-│   ├── blocks.xml                 11 block defs: 6 mature trees + 5 seeds (plus a template)
-│   ├── biomes.xml                 inject all 6 mature trees into pine_forest decoration list
-│   ├── loot.xml                   add 5 seeds to vanilla `seeds` / `seedsNoFlowers` groups
-│   ├── traders.xml                add 5 seeds to shared `seeds` trader_item_group
+│   ├── blocks.xml                 27 block defs: trees, growth stages, wild variants + seeds (plus 2 templates)
+│   ├── biomes.xml                 inject mature trees + wild variants into pine_forest decoration list
+│   ├── loot.xml                   add seeds to vanilla `seeds` / `seedsNoFlowers` groups
+│   ├── traders.xml                add seeds to shared `seeds` trader_item_group
 │   └── Localization.txt           English display names + descriptions for all blocks
 ├── Resources/
 │   └── Bundles/
-│       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~85 MB)
+│       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~200 MB)
 └── UIAtlases/
     └── ItemIconAtlas/             11 PNGs only ~ exactly one per CustomIcon-referencing block
 
@@ -50,12 +52,27 @@ Unity workspace lives in a sibling `RedFoxAnimated` Unity project (path is local
 
 ## Block roster
 
+**RoadsideTrees pack ~ specimen trees** (spaced apart like real trees):
+
 | Tree | Mature block(s) | Seed block | Bundle wrappers (mature / small) |
 |---|---|---|---|
 | Sakura | `treeKitsuneSakura`, `treeKitsuneSakuraLeaf` | `treePlantedKitsuneSakura1m`, `treePlantedKitsuneSakuraLeaf1m` | `*Root`, `*LeafRoot` / `*SmallRoot`, `*LeafSmallRoot` |
 | Keyaki | `treeKitsuneKeyaki` | `treePlantedKitsuneKeyaki1m` | `treeKitsuneKeyakiRoot` / `*KeyakiSmallRoot` |
 | Dogwood | `treeKitsuneDogwood`, `treeKitsuneDogwoodLeaf` | `treePlantedKitsuneDogwood1m` (shared) | `*DogwoodRoot`, `*DogwoodLeafRoot` / `*DogwoodSmallRoot` |
 | Plane tree | `treeKitsunePlaneTree` | `treePlantedKitsunePlaneTree1m` | `*PlaneTreeRoot` / `*PlaneTreeSmallRoot` |
+
+**FreeJapaneseGarden pack ~ garden plants:**
+
+| Plant | Mature / stages | Seed block | Notes |
+|---|---|---|---|
+| Bamboo | `treeKitsuneBamboo`, `treeKitsuneBambooMid` | `treePlantedKitsuneBamboo1m` | True 3-stage growth (Small → Mid → Big mesh); plants in dense groves |
+| Black pine | `treeKitsuneBlackPine`, `treeKitsuneBlackPineMid` | `treePlantedKitsuneBlackPine1m` | True 3-stage growth; stays tree-spaced |
+| Boxwood | `treeKitsuneBoxwood` | `treePlantedKitsuneBoxwood1m` | Single mesh; plants in dense hedges |
+| Painted fern | `treeKitsunePaintedFern` | `treePlantedKitsunePaintedFern1m` | Single mesh; plants in dense ground-cover patches |
+
+Wild-variety blocks ~ `treeKitsuneBambooWild{Small,Mid,Big}`, `treeKitsuneBoxwood{B,C}`, `treeKitsunePaintedFernB` ~ share a base plant's name and seed drop but swap in alternate meshes, so a biome-spawned grove isn't a field of clones.
+
+**Two grove mechanics:** bamboo/boxwood/fern seeds extend the vanilla *crop* base (`cropsGrowingMaster`, `Class="PlantGrowing"`) and their mature blocks extend a custom `treeKitsuneGroveMaster` model-block template ~ both escape the vanilla tree class (`ModelTree`), which enforces a minimum tree-to-tree spacing at placement time that no XML property can override. The result: dense groves and hedges. Black pine and the RoadsideTrees specimens keep the tree class and stay spaced.
 
 **Parked for a future build:**
 
@@ -70,12 +87,17 @@ The seed-stage block uses a **small variant of the same tree** from the bundle (
 
 ## License & asset attribution
 
-**Tree meshes** are from the **"Roadside Trees"** package on the Unity Asset Store, purchased under one developer seat. They're bundled into the compiled `KitsuneFlora.unity3d` file as part of this mod (a derivative work, permitted under the Unity Asset Store EULA). Specifically:
+**Tree and plant meshes** come from two Unity Asset Store packages:
+
+- **"Roadside Trees"** ~ the specimen trees (sakura, keyaki, dogwood, plane tree), purchased under one developer seat.
+- **"FreeJapaneseGarden"** by Waldemarst ~ the garden plants (bamboo, black pine, boxwood, painted fern).
+
+Both are bundled into the compiled `KitsuneFlora.unity3d` file as part of this mod (a derivative work, permitted under the Unity Asset Store EULA). Specifically:
 
 - ✅ The compiled `.unity3d` bundle ships with the mod.
-- ❌ Source FBX / texture files from the Asset Store pack are **NOT** redistributed. The `Assets/RoadsideTrees/` Unity import folder is `.gitignore`'d and never committed.
+- ❌ Source FBX / texture files from either pack are **NOT** redistributed. The `Assets/RoadsideTrees/` and `Assets/Waldemarst/` Unity import folders are `.gitignore`'d and never committed.
 - ❌ You cannot extract the source FBX from the bundle and reuse it elsewhere.
-- If you want to extend this mod with additional tree assets from the same pack, you'll need to purchase your own copy from the Unity Asset Store.
+- If you want to extend this mod with additional assets from either pack, grab your own copy from the Unity Asset Store (FreeJapaneseGarden is free).
 
 **Mod code, XML, custom textures, and icons** © AdaInTheLab (adainthelab@gmail.com), free to fork and modify under reasonable use. Credit appreciated but not required.
 
@@ -101,7 +123,7 @@ Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 5. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot`, etc.).
 6. Re-export bundle.
 
-Verification with UnityPy: bundle's top-level GameObjects should include all 11 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
+Verification with UnityPy: bundle's top-level GameObjects should include all 25 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
 
 ## Other V2.6 modding lessons baked into this mod
 

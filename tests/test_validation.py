@@ -37,7 +37,7 @@ LOCALIZATION_TXT = CONFIG_DIR / "Localization.txt"
 
 # Block defs we define but that aren't player-facing (templates that other
 # blocks extend). They don't need icons, localization, or biome entries.
-TEMPLATE_BLOCKS = {"treeKitsuneMaster"}
+TEMPLATE_BLOCKS = {"treeKitsuneMaster", "treeKitsuneGroveMaster"}
 
 
 # ---------- fixtures -----------------------------------------------------

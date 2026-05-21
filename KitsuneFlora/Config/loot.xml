@@ -19,14 +19,23 @@
         <item name="treePlantedKitsuneKeyaki1m"/>
         <item name="treePlantedKitsuneDogwood1m"/>
         <item name="treePlantedKitsunePlaneTree1m"/>
+        <item name="treePlantedKitsuneBamboo1m"/>
+        <item name="treePlantedKitsuneBlackPine1m"/>
+        <item name="treePlantedKitsuneBoxwood1m"/>
+        <item name="treePlantedKitsunePaintedFern1m"/>
     </append>
 
     <append xpath="/lootcontainers/lootgroup[@name='seedsNoFlowers']">
-        <item name="treePlantedKitsuneSakuraLeaf1m" count="1,3"/>
-        <item name="treePlantedKitsuneKeyaki1m"     count="1,3"/>
-        <item name="treePlantedKitsunePlaneTree1m"      count="1,3"/>
-        <!-- Sakura/Dogwood/Azalea (the flowering ones) omitted from
-             the "no flowers" group on purpose. -->
+        <item name="treePlantedKitsuneSakuraLeaf1m"  count="1,3"/>
+        <item name="treePlantedKitsuneKeyaki1m"      count="1,3"/>
+        <item name="treePlantedKitsunePlaneTree1m"   count="1,3"/>
+        <item name="treePlantedKitsuneBamboo1m"      count="1,3"/>
+        <item name="treePlantedKitsuneBlackPine1m"   count="1,3"/>
+        <item name="treePlantedKitsuneBoxwood1m"     count="1,3"/>
+        <item name="treePlantedKitsunePaintedFern1m" count="1,3"/>
+        <!-- Sakura/Dogwood (the flowering ones) omitted from the
+             "no flowers" group on purpose. Bamboo/pine/boxwood/fern
+             are non-flowering so they belong here. -->
     </append>
 
 </configs>

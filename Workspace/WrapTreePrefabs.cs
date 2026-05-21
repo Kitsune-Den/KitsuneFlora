@@ -68,6 +68,37 @@ public static class WrapTreePrefabs
         ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodSmallRoot",    0.5f, 2.1f, 1.05f, 0.35f),
         ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeSmallRoot",  0.5f, 3.5f, 1.75f, 0.35f),
         // ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                  "treeKitsuneAzaleaSmallRoot",     0.4f, 0.4f, 0.2f,  0.35f),
+
+        // ============================================================
+        // FreeJapaneseGarden pack (Waldemarst). 14 wrappers.
+        // Bamboo + Black Pine ship real Small/Mid/Big meshes — true
+        // 3-stage growth chains (no scale-hack). All scale=1; the size
+        // IS the mesh. Collider values are first-pass estimates.
+        // ============================================================
+
+        // -- Bamboo _01 set: the plantable 3-stage growth chain --
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_01.prefab",      "treeKitsuneBambooSmallRoot",     0.3f,  1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_01.prefab",        "treeKitsuneBambooMidRoot",       0.35f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_01.prefab",        "treeKitsuneBambooRoot",          0.4f,  5f,   2.5f,  1f),
+
+        // -- Bamboo _02 set: wild-grove decoration variety (no growth) --
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_02.prefab",      "treeKitsuneBambooWildSmallRoot", 0.3f,  1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_02.prefab",        "treeKitsuneBambooWildMidRoot",   0.35f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_02.prefab",        "treeKitsuneBambooWildBigRoot",   0.4f,  5f,   2.5f,  1f),
+
+        // -- Black Pine: one set, 3-stage growth chain --
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Small_Green_01.prefab","treeKitsuneBlackPineSmallRoot",  0.4f,  1f,   0.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Mid_Green_01.prefab",  "treeKitsuneBlackPineMidRoot",    0.6f,  2.5f, 1.25f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Big_Green_01.prefab",  "treeKitsuneBlackPineRoot",       1f,    5f,   2.5f,  1f),
+
+        // -- Boxwood: 3 variety variants, all "Boxwood Shrub" --
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_01.prefab",       "treeKitsuneBoxwoodRoot",         0.5f,  1f,   0.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_02.prefab",       "treeKitsuneBoxwoodRootB",        0.5f,  1f,   0.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_03.prefab",       "treeKitsuneBoxwoodRootC",        0.5f,  1f,   0.5f,  1f),
+
+        // -- Painted Fern: 2 variety variants, both "Painted Fern" --
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_01.prefab","treeKitsunePaintedFernRoot",    0.4f,  0.6f, 0.3f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_02.prefab","treeKitsunePaintedFernRootB",   0.4f,  0.6f, 0.3f,  1f),
     };
 
     [MenuItem("Tools/Kitsune/Wrap Tree Prefabs With Unique Roots")]

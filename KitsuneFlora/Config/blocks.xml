@@ -46,6 +46,45 @@
         </block>
 
         <!-- ============================================================
+             KITSUNE GROVE TEMPLATE ~ free-placement plant base
+             ============================================================
+             Deliberately does NOT extend treeMaster. The vanilla tree
+             class (Class="ModelTree") refuses to let two trees occupy
+             adjacent blocks at player-placement time ~ that kills tight
+             bamboo groves, boxwood hedges and fern patches no matter what
+             BigDecorationRadius says. This template is a plain model block
+             (Shape="ModelEntity", no special Class) so it places freely
+             like any deco block, while keeping a wood material, a
+             choppable resourceWood harvest, and solid collision.
+
+             Used by bamboo / boxwood / painted fern (mature + wild
+             variants). Big specimen trees (sakura, keyaki, dogwood, plane)
+             and black pine stay on treeKitsuneMaster ~ they're meant to be
+             spaced.
+        -->
+        <block name="treeKitsuneGroveMaster">
+            <property name="CreativeMode" value="Player"/>
+            <property name="Material" value="MtreeWoodLarge"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#Entities/Trees?StudioGimbal/OakSml01/OakSml01GimbalPrefab.prefab"/>
+            <property name="ModelOffset" value="0,-0.3,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="Collide" value="movement,melee"/>
+            <property name="Path" value="solid"/>
+            <property name="DisplayType" value="blockMulti"/>
+            <property name="DescriptionKey" value="plantsBlockGroupDesc"/>
+            <property name="ParticleOnDeath" value="treeGib_dead_01"/>
+            <property name="IsTerrainDecoration" value="true"/>
+            <property name="OnlySimpleRotations" value="true"/>
+            <property name="LightOpacity" value="0"/>
+            <property name="WaterFlow" value="permitted"/>
+            <property name="Tags" value="wood"/>
+            <property name="FilterTags" value="MC_outdoor,SC_trees"/>
+            <drop event="Harvest" name="resourceWood" count="30" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <property name="SortOrder1" value="B902"/>
+        </block>
+
+        <!-- ============================================================
              SAKURA (Cherry Blossom in flower) ~ iconic pink/white blooms
         -->
         <block name="treeKitsuneSakura">
@@ -252,6 +291,293 @@
              until we have a different azalea asset OR a better fit
              for shrub-style blocks. Icons stay in Workspace/IconSources/.
         -->
+
+        <!-- ============================================================
+             BAMBOO (Take) ~ TRUE 3-stage growth chain
+             ============================================================
+             FreeJapaneseGarden pack ships real Small/Mid/Big meshes, so
+             a planted Bamboo Seed visibly grows through three distinct
+             models:
+               treePlantedKitsuneBamboo1m  (Small mesh) ─grow→
+               treeKitsuneBambooMid        (Mid mesh)   ─grow→
+               treeKitsuneBamboo           (Big mesh, mature)
+             No CustomIcon yet — 7DTD generates procedural icons from the
+             mesh until real icon art is drawn.
+        -->
+        <block name="treeKitsuneBamboo">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooRoot"/>
+            <property name="MultiBlockDim" value="1,6,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="35" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBamboo1m" count="1"/>
+            <property name="EconomicValue" value="34"/>
+        </block>
+
+        <block name="treeKitsuneBambooMid">
+            <property name="Extends" value="treeMasterGrowing"/>
+            <property name="CreativeMode" value="None"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneBamboo"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <property name="Material" value="MtreeWoodSmall"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooMidRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="MultiBlockDim" value="1,3,1"/>
+            <property name="Path" value="solid"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <drop event="Harvest" name="resourceWood" count="15" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBamboo1m" count="1"/>
+        </block>
+
+        <block name="treePlantedKitsuneBamboo1m">
+            <!-- Extends cropsGrowingMaster, NOT treeMasterGrowing. The vanilla
+                 tree base is Class="ModelTree", and ModelTree enforces a
+                 minimum tree-to-tree spacing in C# at player-placement time
+                 ~ no XML property (not BigDecorationRadius, not a Class
+                 override) can defeat it, so bamboo seeds could never be
+                 planted adjacent. cropsGrowingMaster is the crop-row base
+                 (Class="PlantGrowing", no BigDecorationRadius): it plants in
+                 tight groves exactly like corn. We drop FertileLevel from the
+                 crop default of 15 back to 1 so bamboo still plants on plain
+                 dirt rather than only on farm plots, and override Shape to
+                 ModelEntity so the bundled 3D mesh renders (the crop base
+                 ships Shape="BillboardPlant"). -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneBambooMid"/>
+            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property name="DescriptionKey" value="treePlantedKitsuneBamboo1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="12"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneBamboo1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             BLACK PINE (Kuromatsu) ~ TRUE 3-stage growth chain
+             ============================================================
+             Same 3-stage pattern as bamboo. Sturdy, slow, heavy-wood
+             tree — the classic gnarled Japanese garden pine.
+        -->
+        <block name="treeKitsuneBlackPine">
+            <property name="Extends" value="treeKitsuneMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineRoot"/>
+            <property name="MultiBlockDim" value="1,7,1"/>
+            <property name="BigDecorationRadius" value="4"/>
+            <drop event="Harvest" name="resourceWood" count="55" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBlackPine1m" count="1"/>
+            <property name="EconomicValue" value="44"/>
+        </block>
+
+        <block name="treeKitsuneBlackPineMid">
+            <property name="Extends" value="treeMasterGrowing"/>
+            <property name="CreativeMode" value="None"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneBlackPine"/>
+            <property name="Material" value="MtreeWoodMedium"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineMidRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="MultiBlockDim" value="1,3,1"/>
+            <property name="Path" value="solid"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <drop event="Harvest" name="resourceWood" count="22" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBlackPine1m" count="1"/>
+        </block>
+
+        <block name="treePlantedKitsuneBlackPine1m">
+            <property name="Extends" value="treeMasterGrowing" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneBlackPineMid"/>
+            <property name="DescriptionKey" value="treePlantedKitsuneBlackPine1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="14"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneBlackPine1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             BOXWOOD (Tsuge) ~ decorative shrub, 2-stage plantable
+             ============================================================
+             Single mesh, no growth chain. Planted seed uses the vanilla
+             oak sprout, then grows straight to the boxwood shrub.
+             1x2x1 block so DistantDecoTree rendering has vertical room.
+        -->
+        <block name="treeKitsuneBoxwood">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRoot"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBoxwood1m" count="1"/>
+            <property name="EconomicValue" value="16"/>
+        </block>
+
+        <block name="treePlantedKitsuneBoxwood1m">
+            <!-- See treePlantedKitsuneBamboo1m: cropsGrowingMaster is the
+                 crop-row base so boxwood shrubs can be planted in dense
+                 hedges instead of tree-spaced. -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsuneBoxwood"/>
+            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property name="DescriptionKey" value="treePlantedKitsuneBoxwood1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
+            <property name="ModelOffset" value="0,-0.2,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="8"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneBoxwood1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             PAINTED FERN (Nishikishida) ~ ground plant, 2-stage plantable
+             ============================================================
+             Low ground-cover fern. Same 2-stage pattern as boxwood.
+        -->
+        <block name="treeKitsunePaintedFern">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRoot"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="2" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsunePaintedFern1m" count="1"/>
+            <property name="EconomicValue" value="10"/>
+        </block>
+
+        <block name="treePlantedKitsunePaintedFern1m">
+            <!-- See treePlantedKitsuneBamboo1m: cropsGrowingMaster is the
+                 crop-row base so painted ferns can be planted in dense
+                 ground-cover patches instead of tree-spaced. -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property name="PlantGrowing.Next" value="treeKitsunePaintedFern"/>
+            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property name="DescriptionKey" value="treePlantedKitsunePaintedFern1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
+            <property name="ModelOffset" value="0,-0.2,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="6"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="10"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsunePaintedFern1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             WILD-GROVE VARIETY BLOCKS
+             ============================================================
+             Decoration-only variants that share their base type's name,
+             seed drop, and behavior — they just use a different mesh so
+             a wild grove isn't 50 identical clones. No growth chain
+             (terminal); biome decoration spawns them mixed with the
+             chain blocks. Choppable; drop the matching seed.
+
+             Bamboo: the _02 mesh set at all three sizes — so a wild
+             bamboo grove has mixed ages AND mixed looks.
+             Boxwood / Painted Fern: extra Spring variants.
+        -->
+        <block name="treeKitsuneBambooWildSmall">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildSmallRoot"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="8" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBamboo1m" count="1"/>
+            <property name="EconomicValue" value="12"/>
+        </block>
+
+        <block name="treeKitsuneBambooWildMid">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildMidRoot"/>
+            <property name="MultiBlockDim" value="1,4,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="18" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBamboo1m" count="1"/>
+            <property name="EconomicValue" value="22"/>
+        </block>
+
+        <block name="treeKitsuneBambooWildBig">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildBigRoot"/>
+            <property name="MultiBlockDim" value="1,6,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="35" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBamboo1m" count="1"/>
+            <property name="EconomicValue" value="34"/>
+        </block>
+
+        <block name="treeKitsuneBoxwoodB">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootB"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBoxwood1m" count="1"/>
+            <property name="EconomicValue" value="16"/>
+        </block>
+
+        <block name="treeKitsuneBoxwoodC">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootC"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsuneBoxwood1m" count="1"/>
+            <property name="EconomicValue" value="16"/>
+        </block>
+
+        <block name="treeKitsunePaintedFernB">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRootB"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Harvest" name="resourceWood" count="2" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <drop event="Destroy" name="treePlantedKitsunePaintedFern1m" count="1"/>
+            <property name="EconomicValue" value="10"/>
+        </block>
 
     </append>
 

@@ -16,6 +16,10 @@
         <item name="treePlantedKitsuneKeyaki1m"/>
         <item name="treePlantedKitsuneDogwood1m"/>
         <item name="treePlantedKitsunePlaneTree1m"/>
+        <item name="treePlantedKitsuneBamboo1m"/>
+        <item name="treePlantedKitsuneBlackPine1m"/>
+        <item name="treePlantedKitsuneBoxwood1m"/>
+        <item name="treePlantedKitsunePaintedFern1m"/>
     </append>
 
 </configs>
