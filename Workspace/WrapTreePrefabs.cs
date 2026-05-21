@@ -11,6 +11,7 @@
 // Original Asset Store prefabs are left untouched. Bundle should be
 // re-pointed at the new wrapper paths.
 
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -96,9 +97,22 @@ public static class WrapTreePrefabs
         ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_02.prefab",       "treeKitsuneBoxwoodRootB",        0.5f,  1f,   0.5f,  1f),
         ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_03.prefab",       "treeKitsuneBoxwoodRootC",        0.5f,  1f,   0.5f,  1f),
 
+        // -- Boxwood seed-stage: same trick as the painted fern. The pack has
+        // no small boxwood mesh, so reuse the _01 shrub at 0.5 localScale ~ a
+        // young shrub that reads as boxwood, not the vanilla oak sprout it
+        // borrowed before. Collider params are pre-scaled (final world size).
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_01.prefab",       "treeKitsuneBoxwoodSmallRoot",    0.5f,  0.5f, 0.25f, 0.5f),
+
         // -- Painted Fern: 2 variety variants, both "Painted Fern" --
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_01.prefab","treeKitsunePaintedFernRoot",    0.4f,  0.6f, 0.3f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_02.prefab","treeKitsunePaintedFernRootB",   0.4f,  0.6f, 0.3f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_01.prefab","treeKitsunePaintedFernRoot",     0.4f,  0.6f, 0.3f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_02.prefab","treeKitsunePaintedFernRootB",    0.4f,  0.6f, 0.3f,  1f),
+
+        // -- Painted Fern seed-stage: the FreeJapaneseGarden pack ships no
+        // small fern mesh, so reuse the _01 fern at 0.5 localScale ~ a young
+        // frond that clearly reads as a FERN. Before this, the fern seed
+        // borrowed the vanilla oak sprout and was visually identical to the
+        // boxwood seed. Collider params are pre-scaled (final world size).
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_01.prefab","treeKitsunePaintedFernSmallRoot",0.4f,  0.3f, 0.15f, 0.5f),
     };
 
     [MenuItem("Tools/Kitsune/Wrap Tree Prefabs With Unique Roots")]
@@ -125,6 +139,15 @@ public static class WrapTreePrefabs
                 var inner = (GameObject)PrefabUtility.InstantiatePrefab(sourcePrefab);
                 inner.transform.SetParent(wrapper.transform, false);
 
+                // Fully unpack the prefab instance so `inner` becomes plain
+                // GameObjects. DestroyImmediate on a component still bound to
+                // a connected prefab instance is unreliable ~ Unity treats it
+                // as an override and some components (notably the FJG
+                // BroccoTreeController wind script) survive into the saved
+                // asset. After a complete unpack every strip below is
+                // unconditional and the saved wrapper is fully self-contained.
+                PrefabUtility.UnpackPrefabInstance(inner, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+
                 // Scale the inner child instead of the wrapper, so the
                 // BoxCollider on the wrapper stays at world-meter scale
                 // (the radius/height values describe final visible size).
@@ -138,6 +161,21 @@ public static class WrapTreePrefabs
                 // should exist on the saved prefab.
                 foreach (var c in inner.GetComponentsInChildren<Collider>(true))
                     Object.DestroyImmediate(c);
+
+                // Strip ALL MonoBehaviour scripts from the inner asset.
+                // FreeJapaneseGarden prefabs ship a Broccoli.Controller.
+                // BroccoTreeController wind script; that DLL isn't present in
+                // 7DTD, so the bundled component deserializes as a "missing
+                // script" and spams NullReferenceExceptions every frame.
+                // Built-in components (MeshRenderer, MeshFilter, LODGroup)
+                // are NOT MonoBehaviours, so rendering + LODs survive.
+                foreach (var mb in inner.GetComponentsInChildren<MonoBehaviour>(true))
+                    if (mb != null) Object.DestroyImmediate(mb);
+
+                // Belt-and-suspenders: sweep any component whose script truly
+                // cannot be resolved (missing-script) on every GameObject.
+                foreach (var t in inner.GetComponentsInChildren<Transform>(true))
+                    GameObjectUtility.RemoveMonoBehavioursWithMissingScript(t.gameObject);
 
                 // Add BoxCollider on the wrapper root.
                 var box = wrapper.AddComponent<BoxCollider>();
@@ -159,5 +197,64 @@ public static class WrapTreePrefabs
         AssetDatabase.Refresh();
         Debug.Log($"[KitsuneFlora] Done. Wrappers created in {OutDir}/. " +
                   "Update the Bundle asset's Objects list to point at these new prefabs, then re-export.");
+    }
+
+    // ============================================================
+    // Strip wind-controller scripts from the SOURCE prefabs.
+    // ============================================================
+    // The FreeJapaneseGarden trees are Broccoli-generated: their LOD
+    // meshes are saved as sub-assets INSIDE each source .prefab file,
+    // right alongside a BroccoTreeController wind-script component.
+    // OCB builds the bundle with BuildAssetBundleOptions.CompleteAssets,
+    // so depending on one of those embedded meshes drags the ENTIRE
+    // source prefab into the bundle ~ BroccoTreeController and all ~
+    // no matter how clean the wrapper is (the wrapper only references
+    // the mesh; CompleteAssets pulls the whole owning asset). 7DTD has
+    // no Broccoli runtime, so every bundled controller spams
+    // missing-script NullReferenceExceptions.
+    //
+    // The only real fix is to strip the scripts from the source
+    // prefabs themselves. Run this once; it's idempotent. Wrappers do
+    // NOT need rebuilding afterward (mesh GUIDs/fileIDs are untouched)
+    // ~ just re-export the bundle.
+    [MenuItem("Tools/Kitsune/Strip Scripts From Source Prefabs")]
+    public static void StripSourceScripts()
+    {
+        var seen = new HashSet<string>();
+        int total = 0;
+        foreach (var (sourcePath, _, _, _, _, _) in Targets)
+        {
+            if (!seen.Add(sourcePath)) continue;
+
+            var contents = PrefabUtility.LoadPrefabContents(sourcePath);
+            if (contents == null)
+            {
+                Debug.LogWarning($"[KitsuneFlora] Source prefab not found: {sourcePath}");
+                continue;
+            }
+            try
+            {
+                int n = 0;
+                foreach (var mb in contents.GetComponentsInChildren<MonoBehaviour>(true))
+                    if (mb != null) { Object.DestroyImmediate(mb); n++; }
+                foreach (var t in contents.GetComponentsInChildren<Transform>(true))
+                    GameObjectUtility.RemoveMonoBehavioursWithMissingScript(t.gameObject);
+
+                if (n > 0)
+                {
+                    PrefabUtility.SaveAsPrefabAsset(contents, sourcePath);
+                    total += n;
+                    Debug.Log($"[KitsuneFlora] Stripped {n} script(s) from {sourcePath}");
+                }
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(contents);
+            }
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log($"[KitsuneFlora] Done. Stripped {total} MonoBehaviour(s) from source " +
+                  "prefabs. Re-export the bundle ~ no re-wrap needed.");
     }
 }

@@ -307,6 +307,7 @@
         <block name="treeKitsuneBamboo">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,6,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="35" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -375,6 +376,7 @@
         <block name="treeKitsuneBlackPine">
             <property name="Extends" value="treeKitsuneMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBlackPine"/>
             <property name="MultiBlockDim" value="1,7,1"/>
             <property name="BigDecorationRadius" value="4"/>
             <drop event="Harvest" name="resourceWood" count="55" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -428,6 +430,7 @@
         <block name="treeKitsuneBoxwood">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -448,8 +451,11 @@
             <property name="DescriptionKey" value="treePlantedKitsuneBoxwood1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
-            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
-            <property name="ModelOffset" value="0,-0.2,0"/>
+            <!-- Real boxwood mesh at 0.5 scale (treeKitsuneBoxwoodSmallRoot)
+                 so a planted boxwood seed reads as a young shrub, not the
+                 oak sprout it used to share with the fern seed. -->
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
@@ -471,6 +477,7 @@
         <block name="treeKitsunePaintedFern">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRoot"/>
+            <property name="CustomIcon" value="treeKitsunePaintedFern"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="2" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -491,8 +498,11 @@
             <property name="DescriptionKey" value="treePlantedKitsunePaintedFern1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
-            <property name="Model" value="#Entities/Trees?OakSeed01Prefab.prefab"/>
-            <property name="ModelOffset" value="0,-0.2,0"/>
+            <!-- Real fern mesh at 0.5 scale (treeKitsunePaintedFernSmallRoot)
+                 so a planted fern seed reads as a young fern, not the oak
+                 sprout it used to share with the boxwood seed. -->
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernSmallRoot"/>
+            <property name="ModelOffset" value="0,-0.1,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
@@ -522,6 +532,7 @@
         <block name="treeKitsuneBambooWildSmall">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildSmallRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="8" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -532,6 +543,7 @@
         <block name="treeKitsuneBambooWildMid">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildMidRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,4,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="18" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -542,6 +554,7 @@
         <block name="treeKitsuneBambooWildBig">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildBigRoot"/>
+            <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,6,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="35" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -552,6 +565,7 @@
         <block name="treeKitsuneBoxwoodB">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootB"/>
+            <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -562,6 +576,7 @@
         <block name="treeKitsuneBoxwoodC">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootC"/>
+            <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="6" tag="oreWoodHarvest,lumberjackHarvest"/>
@@ -572,6 +587,7 @@
         <block name="treeKitsunePaintedFernB">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRootB"/>
+            <property name="CustomIcon" value="treeKitsunePaintedFern"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
             <drop event="Harvest" name="resourceWood" count="2" tag="oreWoodHarvest,lumberjackHarvest"/>

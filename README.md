@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.3.6-purple)
+![version](https://img.shields.io/badge/version-0.3.7-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
@@ -18,10 +18,11 @@ Standalone 7 Days to Die V2.6 mod adding ten Japanese-themed trees and garden pl
 **🌸 v0.3 WORKING ~ 2026-05-21.**
 
 - 27 block defs across two templates: 10 trees/plants in mature, growth-stage, wild-variety and seed forms
-- 25 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
+- 27 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
 - Biome decoration (pine_forest, rare-to-common), farm loot drops, trader stock
 - Bamboo + black pine grow through true three-stage meshes; bamboo, boxwood and ferns plant adjacent for dense groves and hedges
 - Foliage sways with a custom vertex-wind shader; saplings sit still
+- Hand-drawn item icons for all 10 plants ~ distinct mature and seed art
 - First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
 
 ## Layout
@@ -133,6 +134,27 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 25 
 - **Bundle-side BoxCollider on the wrapper root** ~ see "The fix" above.
 - **No `.prefab` extension on bundle asset names** ~ `?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`.
 - **Hitbox sizing** ~ keep collider radius ≤ 0.5m on 1×N×1 MultiBlockDim trees, otherwise the wider collider overlaps neighboring blocks and HP overlay flickers.
+
+## Known log messages
+
+**`Block 'treeKitsuneXxx' needs a deco shape assigned but has not!`** ~ harmless, by design.
+
+7DTD's `DecoObject` system (the batched renderer for biome decorations) builds a "deco
+shape" ~ a lightweight imposter representation ~ for each block the chunk decorator
+places. It derives that from the block's model, and the engine only generates it for its
+own built-in model assets ~ there's no path to produce one from a mod's `.unity3d`
+bundle mesh. So every Kitsune tree the biome decorator places logs this line once.
+
+It is purely cosmetic. The block still spawns and renders via its normal model; it just
+skips the distant-imposter optimisation. Confirmed by comparison with vanilla `rock01`
+and `treeStump`, which carry the *identical* block config (`Shape="ModelEntity"`,
+`IsTerrainDecoration="true"`) yet never log it ~ the sole difference is vanilla model vs
+mod-bundle model. No `Shape`, `IsTerrainDecoration`, or other XML property changes it
+(all tested against vanilla). It's the deco-system counterpart of the terrain-registration
+quirk above, and unlike terrain registration there is no XML hook for it.
+
+Silencing it would require a Harmony patch ~ disproportionate for a one-line, non-fatal
+message on an otherwise XML-only mod. Left as-is deliberately.
 
 ## Tests
 
