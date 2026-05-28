@@ -304,8 +304,15 @@
              No CustomIcon yet — 7DTD generates procedural icons from the
              mesh until real icon art is drawn.
         -->
+        <!-- v0.3.8: switched from treeKitsuneGroveMaster (plain ModelEntity)
+             to treeKitsuneMaster (ModelTree) so mature bamboo fells like a
+             vanilla 7DTD tree ~ chopping the bottom block topples the whole
+             trunk and despawns the rest, instead of having to chop each
+             of the 6 stacked cells individually. Player-placement spacing
+             constraints don't matter for bamboo because seeds use the crop
+             base and biome decoration ignores ModelTree's spacing check. -->
         <block name="treeKitsuneBamboo">
-            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooRoot"/>
             <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,6,1"/>
@@ -529,8 +536,11 @@
              bamboo grove has mixed ages AND mixed looks.
              Boxwood / Painted Fern: extra Spring variants.
         -->
+        <!-- v0.3.8: same switch from treeKitsuneGroveMaster to treeKitsuneMaster
+             as the planted bamboo above ~ wild biome-spawned bamboo now fells
+             like a vanilla tree too. -->
         <block name="treeKitsuneBambooWildSmall">
-            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildSmallRoot"/>
             <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,2,1"/>
@@ -541,7 +551,7 @@
         </block>
 
         <block name="treeKitsuneBambooWildMid">
-            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildMidRoot"/>
             <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,4,1"/>
@@ -552,7 +562,7 @@
         </block>
 
         <block name="treeKitsuneBambooWildBig">
-            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="Extends" value="treeKitsuneMaster"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooWildBigRoot"/>
             <property name="CustomIcon" value="treeKitsuneBamboo"/>
             <property name="MultiBlockDim" value="1,6,1"/>

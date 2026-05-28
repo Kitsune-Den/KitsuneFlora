@@ -78,14 +78,19 @@ public static class WrapTreePrefabs
         // ============================================================
 
         // -- Bamboo _01 set: the plantable 3-stage growth chain --
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_01.prefab",      "treeKitsuneBambooSmallRoot",     0.3f,  1.5f, 0.75f, 1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_01.prefab",        "treeKitsuneBambooMidRoot",       0.35f, 3f,   1.5f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_01.prefab",        "treeKitsuneBambooRoot",          0.4f,  5f,   2.5f,  1f),
+        // Collider radius HALVED in v0.3.8 ~ bamboo trunks are visually
+        // narrow and the previous 0.3-0.4m radius blocked the player from
+        // walking through groves convincingly. Trimming to ~0.15-0.2m
+        // leaves a hit-target for melee but lets the player squeeze past.
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_01.prefab",      "treeKitsuneBambooSmallRoot",     0.15f, 1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_01.prefab",        "treeKitsuneBambooMidRoot",       0.18f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_01.prefab",        "treeKitsuneBambooRoot",          0.2f,  5f,   2.5f,  1f),
 
         // -- Bamboo _02 set: wild-grove decoration variety (no growth) --
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_02.prefab",      "treeKitsuneBambooWildSmallRoot", 0.3f,  1.5f, 0.75f, 1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_02.prefab",        "treeKitsuneBambooWildMidRoot",   0.35f, 3f,   1.5f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_02.prefab",        "treeKitsuneBambooWildBigRoot",   0.4f,  5f,   2.5f,  1f),
+        // Same halved collider radius as the _01 set; see comment above.
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_02.prefab",      "treeKitsuneBambooWildSmallRoot", 0.15f, 1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_02.prefab",        "treeKitsuneBambooWildMidRoot",   0.18f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_02.prefab",        "treeKitsuneBambooWildBigRoot",   0.2f,  5f,   2.5f,  1f),
 
         // -- Black Pine: one set, 3-stage growth chain --
         ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Small_Green_01.prefab","treeKitsuneBlackPineSmallRoot",  0.4f,  1f,   0.5f,  1f),

@@ -2,7 +2,7 @@
 <xml>
     <Name value="KitsuneFlora" />
     <DisplayName value="Kitsune Flora" />
-    <Version value="0.3.7" />
+    <Version value="0.3.8" />
     <Description value="Japanese-themed trees and garden plants: sakura (bloom + leaf), keyaki, dogwood (pink + white), plane tree, bamboo, black pine, boxwood, and painted fern. Plantable, harvestable, drop wood. Seeds visibly grow from sapling → mature mesh; bamboo and black pine through a true three-stage chain. Bamboo, boxwood and ferns plant in dense groves. Foliage sways with a custom wind shader. Spawns in pine forest biome, drops in farm loot, stocked at traders. Standalone." />
     <Author value="AdaInTheLab" />
     <Website value="" />
