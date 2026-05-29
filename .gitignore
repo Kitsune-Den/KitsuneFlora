@@ -16,3 +16,6 @@ desktop.ini
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# --- Release artifacts (built by pack-release.ps1, uploaded to GitHub releases) ---
+KitsuneFlora-v*.zip
