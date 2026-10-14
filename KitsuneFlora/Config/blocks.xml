@@ -51,26 +51,28 @@
              Deliberately does NOT extend treeMaster. The vanilla tree
              class (Class="ModelTree") refuses to let two trees occupy
              adjacent blocks at player-placement time ~ that kills tight
-             bamboo groves, boxwood hedges and fern patches no matter what
+             boxwood hedges and fern patches no matter what
              BigDecorationRadius says. This template is a plain model block
              (Shape="ModelEntity", no special Class) so it places freely
-             like any deco block, while keeping a wood material, a
-             choppable resourceWood harvest, and solid collision.
+             like any deco block. Soft Mplants material + MaxDamage=10 means
+             one-punch destroy; Collide=melee makes them walk-through.
 
-             Used by bamboo / boxwood / painted fern (mature + wild
-             variants). Big specimen trees (sakura, keyaki, dogwood, plane)
-             and black pine stay on treeKitsuneMaster ~ they're meant to be
+             Used by boxwood / painted fern (mature + wild variants). Bamboo
+             migrated to treeKitsuneMaster in v0.3.8 so it fells like a real
+             tree. Big specimen trees (sakura, keyaki, dogwood, plane) and
+             black pine stay on treeKitsuneMaster ~ they're meant to be
              spaced.
         -->
         <block name="treeKitsuneGroveMaster">
             <property name="CreativeMode" value="Player"/>
-            <property name="Material" value="MtreeWoodLarge"/>
+            <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
             <property name="Model" value="#Entities/Trees?StudioGimbal/OakSml01/OakSml01GimbalPrefab.prefab"/>
             <property name="ModelOffset" value="0,-0.3,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="Collide" value="melee"/>
-            <property name="MaxDamage" value="10"/>
+            <property name="MaxDamage" value="1"/>
+            <property name="HarvestOverdamage" value="false"/>
             <property name="DisplayType" value="blockMulti"/>
             <property name="DescriptionKey" value="plantsBlockGroupDesc"/>
             <property name="ParticleOnDeath" value="treeGib_dead_01"/>
@@ -80,7 +82,9 @@
             <property name="WaterFlow" value="permitted"/>
             <property name="Tags" value="wood"/>
             <property name="FilterTags" value="MC_outdoor,SC_trees"/>
-            <drop event="Harvest" name="resourceWood" count="30" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <!-- Per-block Destroy drops live on the children (wood + seed).
+                 No master-level Harvest drop: these are deco plants, not trees. -->
+            <drop event="Destroy" count="0"/>
             <property name="SortOrder1" value="B902"/>
         </block>
 
