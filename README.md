@@ -8,7 +8,7 @@
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.0-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
-![code](https://img.shields.io/badge/code-MIT--style-blue)
+![code](https://img.shields.io/badge/code-CC_BY--NC--SA_4.0-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
 Standalone 7 Days to Die V2.6-V3.0 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced.
@@ -100,7 +100,7 @@ Both are bundled into the compiled `KitsuneFlora.unity3d` file as part of this m
 - ❌ You cannot extract the source FBX from the bundle and reuse it elsewhere.
 - If you want to extend this mod with additional assets from either pack, grab your own copy from the Unity Asset Store (FreeJapaneseGarden is free).
 
-**Mod code, XML, custom textures, and icons** © AdaInTheLab (adainthelab@gmail.com), free to fork and modify under reasonable use. Credit appreciated but not required.
+**Mod code, XML, custom textures, and icons** © AdaInTheLab, licensed under [CC BY-NC-SA 4.0](LICENSE) with an extra permission for servers that make money: see [NOTICE.md](NOTICE.md).
 
 ## The bug nobody else online has documented
 
