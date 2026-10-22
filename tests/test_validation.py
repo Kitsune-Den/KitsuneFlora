@@ -33,7 +33,12 @@ BLOCKS_XML = CONFIG_DIR / "blocks.xml"
 BIOMES_XML = CONFIG_DIR / "biomes.xml"
 LOOT_XML = CONFIG_DIR / "loot.xml"
 TRADERS_XML = CONFIG_DIR / "traders.xml"
-LOCALIZATION_TXT = CONFIG_DIR / "Localization.txt"
+LOCALIZATION_TXT = CONFIG_DIR / "Localization.txt"  # read by V2.x
+LOCALIZATION_CSV = CONFIG_DIR / "Localization.csv"  # read by V3.x
+
+# The languages 7DTD ships besides English.
+LANGUAGES = ["german", "spanish", "french", "italian", "japanese", "koreana", "polish",
+             "brazilian", "russian", "turkish", "schinese", "tchinese"]
 
 # Block defs we define but that aren't player-facing (templates that other
 # blocks extend). They don't need icons, localization, or biome entries.
@@ -70,6 +75,13 @@ def localization_keys() -> set[str]:
             if row and row[0]:
                 keys.add(row[0])
     return keys
+
+
+def read_localization(path: Path) -> tuple[list[str], list[list[str]]]:
+    """(header, rows) of a localization table."""
+    with path.open(encoding="utf-8") as f:
+        rows = [r for r in csv.reader(f) if r]
+    return rows[0], rows[1:]
 
 
 # ---------- parse helpers ------------------------------------------------
@@ -201,6 +213,35 @@ def test_every_concrete_block_has_localization(concrete_blocks, localization_key
         f"These blocks have no Localization.txt {label} entry:\n"
         + "\n".join(f"  {k}" for k in sorted(missing))
     )
+
+
+@pytest.mark.parametrize("path", [LOCALIZATION_TXT, LOCALIZATION_CSV], ids=lambda p: p.name)
+def test_localization_rows_fit_the_header(path: Path):
+    """Every row has exactly the header's columns ~ an unquoted comma in a
+    description splits it, and the game shows only the part before the comma."""
+    header, rows = read_localization(path)
+    bad = [f"  {r[0]}: {len(r)} columns" for r in rows if len(r) != len(header)]
+    assert not bad, f"{path.name} rows with the wrong column count (header has {len(header)}):\n" + "\n".join(bad)
+
+
+@pytest.mark.parametrize("path", [LOCALIZATION_TXT, LOCALIZATION_CSV], ids=lambda p: p.name)
+def test_localization_has_every_language(path: Path):
+    """Every row is translated into all 12 game languages."""
+    header, rows = read_localization(path)
+    missing_cols = [lang for lang in LANGUAGES if lang not in header]
+    assert not missing_cols, f"{path.name} has no column for: {missing_cols}"
+    empty = [f"  {r[0]}: {lang}" for r in rows for lang in LANGUAGES
+             if not r[header.index(lang)].strip()]
+    assert not empty, f"{path.name} has untranslated cells:\n" + "\n".join(empty)
+
+
+def test_localization_csv_matches_txt():
+    """V2.x reads the .txt and V3.x the .csv ~ both must say the same thing."""
+    def table(path: Path) -> dict[str, tuple[str, ...]]:
+        header, rows = read_localization(path)
+        cols = ["english"] + LANGUAGES
+        return {r[0]: tuple(r[header.index(c)] for c in cols) for r in rows}
+    assert table(LOCALIZATION_CSV) == table(LOCALIZATION_TXT)
 
 
 def test_biomes_xml_blocknames_exist(block_names):

@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.3.8-purple)
+![version](https://img.shields.io/badge/version-0.4.0-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.0-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
@@ -15,7 +15,7 @@ Standalone 7 Days to Die V2.6-V3.0 mod adding ten Japanese-themed trees and gard
 
 ## Status
 
-**🌸 v0.3 WORKING ~ 2026-05-21.**
+**🌸 v0.4 WORKING ~ 2026-10-22.**
 
 - 27 block defs across two templates: 10 trees/plants in mature, growth-stage, wild-variety and seed forms
 - 27 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
@@ -23,6 +23,7 @@ Standalone 7 Days to Die V2.6-V3.0 mod adding ten Japanese-themed trees and gard
 - Bamboo + black pine grow through true three-stage meshes; bamboo, boxwood and ferns plant adjacent for dense groves and hedges
 - Foliage sways with a custom vertex-wind shader; saplings sit still
 - Hand-drawn item icons for all 10 plants ~ distinct mature and seed art
+- Names and descriptions in English plus German, Spanish, French, Italian, Japanese, Korean, Polish, Brazilian Portuguese, Russian, Turkish, and Simplified and Traditional Chinese (v0.4)
 - First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
 
 ## Layout
@@ -35,7 +36,8 @@ KitsuneFlora/                      ← what ships in the mod
 │   ├── biomes.xml                 inject mature trees + wild variants into pine_forest decoration list
 │   ├── loot.xml                   add seeds to vanilla `seeds` / `seedsNoFlowers` groups
 │   ├── traders.xml                add seeds to shared `seeds` trader_item_group
-│   └── Localization.txt           English display names + descriptions for all blocks
+│   ├── Localization.csv           display names + descriptions in 13 languages (read by V3.x)
+│   └── Localization.txt           the same table for V2.x ~ keep the two in sync
 ├── Resources/
 │   └── Bundles/
 │       └── KitsuneFlora.unity3d   ← gitignored, rebuilt from Unity (~200 MB)
@@ -158,7 +160,7 @@ message on an otherwise XML-only mod. Left as-is deliberately.
 
 ## Tests
 
-XML-only mods don't have classic unit tests, but they have plenty of *cross-references* that can rot silently: rename a block in `blocks.xml` and forget to update `biomes.xml`, ship a CustomIcon without the matching PNG, add a block and forget its Localization entry. `tests/test_validation.py` (pytest, 14 cases) catches all of that before the game does:
+XML-only mods don't have classic unit tests, but they have plenty of *cross-references* that can rot silently: rename a block in `blocks.xml` and forget to update `biomes.xml`, ship a CustomIcon without the matching PNG, add a block and forget its Localization entry. `tests/test_validation.py` (pytest, 19 cases) catches all of that before the game does:
 
 ```bash
 pip install -r tests/requirements.txt
@@ -171,6 +173,7 @@ What it checks:
 - Every `<drop event="Destroy">` and `PlantGrowing.Next` references a block that exists
 - Every `CustomIcon` value has a matching PNG in `UIAtlases/ItemIconAtlas/`
 - Every concrete block has both a name and a description entry in `Localization.txt`
+- `Localization.txt` and `Localization.csv` match, every row fits the header (an unquoted comma used to cut descriptions short) and every row is filled in for all 12 languages
 - `biomes.xml` / `loot.xml` / `traders.xml` only reference blocks that exist
 - `ItemIconAtlas/` contains no orphan PNGs (source masters live in `Workspace/IconSources/` instead ~ see Icon discipline note above)
 - `ModInfo.xml` `<Version>` agrees with the `vX.Y WORKING` line in this README
