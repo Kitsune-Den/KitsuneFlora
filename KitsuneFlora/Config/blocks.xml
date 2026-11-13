@@ -34,6 +34,9 @@
         -->
         <block name="treeKitsuneMaster">
             <property name="Extends" value="treeMaster"/>
+            <!-- Template only. Extends never inherits CreativeMode, so it must
+                 be set here or the template shows in the creative menu. -->
+            <property name="CreativeMode" value="None"/>
             <property name="Material" value="MtreeWoodLarge"/>
             <property name="Model" value="#Entities/Trees?StudioGimbal/OakSml01/OakSml01GimbalPrefab.prefab"/>
             <property name="ModelOffset" value="0,-0.3,0"/>
@@ -51,26 +54,30 @@
              Deliberately does NOT extend treeMaster. The vanilla tree
              class (Class="ModelTree") refuses to let two trees occupy
              adjacent blocks at player-placement time ~ that kills tight
-             bamboo groves, boxwood hedges and fern patches no matter what
+             boxwood hedges and fern patches no matter what
              BigDecorationRadius says. This template is a plain model block
              (Shape="ModelEntity", no special Class) so it places freely
-             like any deco block, while keeping a wood material, a
-             choppable resourceWood harvest, and solid collision.
+             like any deco block. Soft Mplants material + MaxDamage=1 means
+             one-punch destroy; Collide=melee makes them walk-through.
 
-             Used by bamboo / boxwood / painted fern (mature + wild
-             variants). Big specimen trees (sakura, keyaki, dogwood, plane)
-             and black pine stay on treeKitsuneMaster ~ they're meant to be
+             Used by boxwood / painted fern (mature + wild variants). Bamboo
+             migrated to treeKitsuneMaster in v0.3.8 so it fells like a real
+             tree. Big specimen trees (sakura, keyaki, dogwood, plane) and
+             black pine stay on treeKitsuneMaster ~ they're meant to be
              spaced.
         -->
         <block name="treeKitsuneGroveMaster">
-            <property name="CreativeMode" value="Player"/>
-            <property name="Material" value="MtreeWoodLarge"/>
+            <!-- Template only: hidden from the creative menu. Children that
+                 should be listed set CreativeMode="Player" themselves. -->
+            <property name="CreativeMode" value="None"/>
+            <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
             <property name="Model" value="#Entities/Trees?StudioGimbal/OakSml01/OakSml01GimbalPrefab.prefab"/>
             <property name="ModelOffset" value="0,-0.3,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="Collide" value="melee"/>
-            <property name="MaxDamage" value="10"/>
+            <property name="MaxDamage" value="1"/>
+            <property name="HarvestOverdamage" value="false"/>
             <property name="DisplayType" value="blockMulti"/>
             <property name="DescriptionKey" value="plantsBlockGroupDesc"/>
             <property name="ParticleOnDeath" value="treeGib_dead_01"/>
@@ -80,7 +87,9 @@
             <property name="WaterFlow" value="permitted"/>
             <property name="Tags" value="wood"/>
             <property name="FilterTags" value="MC_outdoor,SC_trees"/>
-            <drop event="Harvest" name="resourceWood" count="30" tag="oreWoodHarvest,lumberjackHarvest"/>
+            <!-- Per-block Destroy drops live on the children (wood + seed).
+                 No master-level Harvest drop: these are deco plants, not trees. -->
+            <drop event="Destroy" count="0"/>
             <property name="SortOrder1" value="B902"/>
         </block>
 
@@ -100,7 +109,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneSakura"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneSakura"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneSakura1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraSmallRoot"/>
@@ -133,7 +144,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneSakuraLeaf"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneSakuraLeaf"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneSakuraLeaf1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSakuraLeafSmallRoot"/>
@@ -169,7 +182,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneKeyaki"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneKeyaki"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneKeyaki1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneKeyakiSmallRoot"/>
@@ -223,7 +238,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneDogwood"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneDogwood"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneDogwood1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneDogwoodSmallRoot"/>
@@ -266,7 +283,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsunePlaneTree"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsunePlaneTree"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsunePlaneTree1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePlaneTreeSmallRoot"/>
@@ -325,7 +344,9 @@
         <block name="treeKitsuneBambooMid">
             <property name="Extends" value="treeMasterGrowing"/>
             <property name="CreativeMode" value="None"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneBamboo"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneBamboo"/>
+            </property>
             <property name="BigDecorationRadius" value="0"/>
             <property name="Material" value="MtreeWoodSmall"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBambooMidRoot"/>
@@ -354,8 +375,10 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneBambooMid"/>
-            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneBambooMid"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneBamboo1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
@@ -394,7 +417,9 @@
         <block name="treeKitsuneBlackPineMid">
             <property name="Extends" value="treeMasterGrowing"/>
             <property name="CreativeMode" value="None"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneBlackPine"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneBlackPine"/>
+            </property>
             <property name="Material" value="MtreeWoodMedium"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineMidRoot"/>
             <property name="ModelOffset" value="0,-0.1,0"/>
@@ -410,7 +435,9 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneBlackPineMid"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneBlackPineMid"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneBlackPine1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBlackPineSmallRoot"/>
@@ -436,7 +463,10 @@
         -->
         <block name="treeKitsuneBoxwood">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRoot"/>
+            <!-- Boxwood mesh is only ~0.8 tall; the template's -0.3 tree offset buried it to a stub. -->
+            <property name="ModelOffset" value="0,0,0"/>
             <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
@@ -453,8 +483,10 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsuneBoxwood"/>
-            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneBoxwood"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsuneBoxwood1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
@@ -462,7 +494,7 @@
                  so a planted boxwood seed reads as a young shrub, not the
                  oak sprout it used to share with the fern seed. -->
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodSmallRoot"/>
-            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ModelOffset" value="0,0,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
@@ -470,7 +502,7 @@
             <property name="EconomicValue" value="8"/>
             <property name="EconomicBundleSize" value="5"/>
             <property name="SellableToTrader" value="false"/>
-            <property name="MaxDamage" value="10"/>
+            <property name="MaxDamage" value="1"/>
             <property name="ActivationDistance" value="4"/>
             <dropextendsoff/>
             <drop event="Harvest" name="treePlantedKitsuneBoxwood1m" count="1" tag="lumberjackHarvest"/>
@@ -483,6 +515,7 @@
         -->
         <block name="treeKitsunePaintedFern">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRoot"/>
             <property name="ModelOffset" value="0,0,0"/>
             <property name="CustomIcon" value="treeKitsunePaintedFern"/>
@@ -501,8 +534,10 @@
             <property name="CreativeMode" value="Player"/>
             <property name="FallOver" value="false"/>
             <property name="PlaceAsRandomRotation" value="true"/>
-            <property name="PlantGrowing.Next" value="treeKitsunePaintedFern"/>
-            <property name="PlantGrowing.FertileLevel" value="1"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsunePaintedFern"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
             <property name="DescriptionKey" value="treePlantedKitsunePaintedFern1mDesc"/>
             <property name="Material" value="Mplants"/>
             <property name="Shape" value="ModelEntity"/>
@@ -510,7 +545,7 @@
                  so a planted fern seed reads as a young fern, not the oak
                  sprout it used to share with the boxwood seed. -->
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernSmallRoot"/>
-            <property name="ModelOffset" value="0,-0.1,0"/>
+            <property name="ModelOffset" value="0,0,0"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="ParticleOnDeath" value="treeGib_sapling"/>
             <property name="Collide" value="melee"/>
@@ -518,7 +553,7 @@
             <property name="EconomicValue" value="6"/>
             <property name="EconomicBundleSize" value="5"/>
             <property name="SellableToTrader" value="false"/>
-            <property name="MaxDamage" value="10"/>
+            <property name="MaxDamage" value="1"/>
             <property name="ActivationDistance" value="4"/>
             <dropextendsoff/>
             <drop event="Harvest" name="treePlantedKitsunePaintedFern1m" count="1" tag="lumberjackHarvest"/>
@@ -575,7 +610,10 @@
 
         <block name="treeKitsuneBoxwoodB">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootB"/>
+            <!-- Boxwood mesh is only ~0.8 tall; the template's -0.3 tree offset buried it to a stub. -->
+            <property name="ModelOffset" value="0,0,0"/>
             <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
@@ -586,7 +624,10 @@
 
         <block name="treeKitsuneBoxwoodC">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneBoxwoodRootC"/>
+            <!-- Boxwood mesh is only ~0.8 tall; the template's -0.3 tree offset buried it to a stub. -->
+            <property name="ModelOffset" value="0,0,0"/>
             <property name="CustomIcon" value="treeKitsuneBoxwood"/>
             <property name="MultiBlockDim" value="1,2,1"/>
             <property name="BigDecorationRadius" value="0"/>
@@ -597,6 +638,7 @@
 
         <block name="treeKitsunePaintedFernB">
             <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
             <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsunePaintedFernRootB"/>
             <property name="ModelOffset" value="0,0,0"/>
             <property name="CustomIcon" value="treeKitsunePaintedFern"/>

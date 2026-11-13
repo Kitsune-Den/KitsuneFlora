@@ -132,18 +132,48 @@ def test_every_destroy_drop_references_existing_block(blocks_root, block_names):
     )
 
 
+def plantgrowing_next(block: ET.Element) -> str | None:
+    """A block's growth target, in the nested form V3.x reads:
+    <property class="PlantGrowing"><property name="Next" value="..."/></property>
+    (V2.6 flattens that same nested form to PlantGrowing.Next on load, so the
+    one form serves both.)"""
+    for cls in block.findall("property[@class='PlantGrowing']"):
+        for prop in cls.findall("property[@name='Next']"):
+            return prop.get("value")
+    return None
+
+
 def test_every_plantgrowing_next_references_existing_block(blocks_root, block_names):
-    """A seed's PlantGrowing.Next must be a real block."""
+    """A seed's PlantGrowing Next must be a real block."""
     missing: list[tuple[str, str]] = []
+    chains = 0
     for block in blocks_root.iter("block"):
         owner = block.get("name", "?")
-        props = block_props(block)
-        target = props.get("PlantGrowing.Next")
-        if target and target not in block_names:
-            missing.append((owner, target))
+        target = plantgrowing_next(block)
+        if target:
+            chains += 1
+            if target not in block_names:
+                missing.append((owner, target))
+    assert chains, "No PlantGrowing Next found at all: the growth chains are gone or in a form this test can't read"
     assert not missing, (
-        "These PlantGrowing.Next values point at non-existent blocks:\n"
+        "These PlantGrowing Next values point at non-existent blocks:\n"
         + "\n".join(f"  {o} grows into {t}" for o, t in missing)
+    )
+
+
+def test_no_dotted_property_names(blocks_root):
+    """V3.3+ throws "Property name ... contains illegal character '.'" on any
+    dotted property name (e.g. the old PlantGrowing.Next), which aborts block
+    loading. Class-scoped properties must use the nested form instead."""
+    dotted = [
+        (block.get("name", "?"), prop.get("name"))
+        for block in blocks_root.iter("block")
+        for prop in block.iter("property")
+        if "." in (prop.get("name") or "")
+    ]
+    assert not dotted, (
+        "Dotted property names break block loading on V3.3+:\n"
+        + "\n".join(f"  {o}: {n}" for o, n in dotted)
     )
 
 

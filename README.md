@@ -4,14 +4,14 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.3.8-purple)
-![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.0-orange)
+![version](https://img.shields.io/badge/version-0.3.11-purple)
+![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.4-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
 ![code](https://img.shields.io/badge/code-CC_BY--NC--SA_4.0-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
-Standalone 7 Days to Die V2.6-V3.0 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced.
+Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced.
 
 ## Status
 
@@ -24,6 +24,17 @@ Standalone 7 Days to Die V2.6-V3.0 mod adding ten Japanese-themed trees and gard
 - Foliage sways with a custom vertex-wind shader; saplings sit still
 - Hand-drawn item icons for all 10 plants ~ distinct mature and seed art
 - First documented V2.6 working pattern for custom-mesh blocks via mod bundle (see "The bug nobody else online has documented" below)
+
+## Compatibility
+
+| Game version | Mod version | State |
+|---|---|---|
+| V3.4 | 0.3.11 | Tested in-game on V3.4.0 (b10): loads clean, plants place, boxwood breaks in one punch and drops wood + seed |
+| V3.3 | 0.3.11 | Same block-loading code as V3.4; not separately play-tested |
+| V3.0 - V3.2 | 0.3.10 or 0.3.11 | 0.3.10 was verified on V3.0 |
+| V2.6 | 0.3.10 or 0.3.11 | 0.3.11 is compatible by design (see "V3.x modding lessons") but has not been re-tested on V2.6 |
+
+**V3.3 and later need 0.3.11.** Older builds use dotted `PlantGrowing.Next` property names, which V3.3+ rejects outright.
 
 ## Layout
 
@@ -44,6 +55,8 @@ KitsuneFlora/                      ← what ships in the mod
 
 Workspace/                         ← dev artifacts, NOT shipped in the mod
 ├── WrapTreePrefabs.cs             Unity Editor script: wraps Asset Store prefabs into bundle-safe wrappers + applies scale + strips inner colliders
+├── tag_bundle_colliders.py        Post-export step: tags every wrapper-root collider T_Block so model blocks can be hit (see "V3.x modding lessons")
+├── inspect_bundle.py              Verifies each wrapper root points at the mesh it should
 └── IconSources/                   Original kebab-case PNGs (sakura-bloom.png etc.) + parked icons for the future ginko slot
 ```
 
@@ -123,6 +136,7 @@ Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 4. Update the OCB Bundle asset's Objects list to point at the new wrapper prefabs.
 5. Update `blocks.xml` Model references to use the wrapper's unique name (`?treeKitsuneSakuraRoot`, etc.).
 6. Re-export bundle.
+7. Run `Workspace/tag_bundle_colliders.py` on the exported bundle (see "V3.x modding lessons" ~ without it boxwood, ferns and grove seeds can't be hit).
 
 Verification with UnityPy: bundle's top-level GameObjects should include all 25 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
 
@@ -134,6 +148,20 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 25 
 - **Bundle-side BoxCollider on the wrapper root** ~ see "The fix" above.
 - **No `.prefab` extension on bundle asset names** ~ `?treeKitsuneSakuraRoot` not `?treeKitsuneSakuraRoot.prefab`.
 - **Hitbox sizing** ~ keep collider radius ≤ 0.5m on 1×N×1 MultiBlockDim trees, otherwise the wider collider overlaps neighboring blocks and HP overlay flickers.
+
+## V3.x modding lessons
+
+- **Nested `PlantGrowing`, never dotted.** V3.3+ throws `Property name 'PlantGrowing.Next' contains illegal character '.'` and block loading fails. Write the growth chain as `<property class="PlantGrowing"><property name="Next" value="..."/></property>`. V3.x reads only that nested class; V2.6 reads the dotted key but flattens the nested form into it on load, so the nested form is the one spelling that serves both.
+- **`CreativeMode` is never inherited.** `Extends` copies every property except `CreativeMode`, so a template block shows up in the creative menu (icon-less) unless it sets `CreativeMode="None"` itself, and each child that should be listed must set `Player` itself.
+- **`ModelEntity` colliders must be tagged `T_Block`.** A melee hit on a `Shape="ModelEntity"` block only counts as a block hit when the struck collider carries the game's `T_Block` tag. The engine never assigns it; vanilla prefabs ship with it. A bundle exported from a Unity project without the game's tag table comes out `Untagged`: the punch lands, is classed as a non-block hit, and nothing happens. Tree-class blocks hide the problem because `BlockModelTree` re-tags its colliders `T_Deco` at runtime. `Workspace/tag_bundle_colliders.py` patches the tag into a built bundle (Unity stores a custom tag as 20000 + its index in the *game's* tag list; `T_Block` is 20004):
+
+  ```bash
+  python Workspace/tag_bundle_colliders.py exported.unity3d KitsuneFlora/Resources/Bundles/KitsuneFlora.unity3d --game "<7 Days To Die install dir>"
+  python Workspace/tag_bundle_colliders.py KitsuneFlora/Resources/Bundles/KitsuneFlora.unity3d --check
+  ```
+
+- **One-punch needs low `MaxDamage`.** The bare fist does 2.2 block damage, so "one punch" means `MaxDamage` of 2 or less; the grove plants use 1.
+- **Template `ModelOffset` is sized for trees.** The grove template's `0,-0.3,0` buries a 0.8-block shrub to a stub; boxwood and fern blocks override it to `0,0,0`.
 
 ## Known log messages
 
@@ -158,7 +186,7 @@ message on an otherwise XML-only mod. Left as-is deliberately.
 
 ## Tests
 
-XML-only mods don't have classic unit tests, but they have plenty of *cross-references* that can rot silently: rename a block in `blocks.xml` and forget to update `biomes.xml`, ship a CustomIcon without the matching PNG, add a block and forget its Localization entry. `tests/test_validation.py` (pytest, 14 cases) catches all of that before the game does:
+XML-only mods don't have classic unit tests, but they have plenty of *cross-references* that can rot silently: rename a block in `blocks.xml` and forget to update `biomes.xml`, ship a CustomIcon without the matching PNG, add a block and forget its Localization entry. `tests/test_validation.py` (pytest, 15 cases) catches all of that before the game does:
 
 ```bash
 pip install -r tests/requirements.txt
@@ -168,7 +196,8 @@ pytest -v tests/
 What it checks:
 
 - All XML files parse cleanly
-- Every `<drop event="Destroy">` and `PlantGrowing.Next` references a block that exists
+- Every `<drop event="Destroy">` and `PlantGrowing` `Next` references a block that exists
+- No property name contains a `.` (V3.3+ refuses to load those)
 - Every `CustomIcon` value has a matching PNG in `UIAtlases/ItemIconAtlas/`
 - Every concrete block has both a name and a description entry in `Localization.txt`
 - `biomes.xml` / `loot.xml` / `traders.xml` only reference blocks that exist
@@ -179,7 +208,7 @@ GitHub Actions runs the same suite on every push ~ the `tests` badge above is th
 
 ## Sync workflow (dev → game)
 
-Edits land in `<repo>/KitsuneFlora/` and need to be copied to the game's `Mods/KitsuneFlora/` folder for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the repo's `Resources/Bundles/` path, then copied across to the game folder.
+Edits land in `<repo>/KitsuneFlora/` and need to be copied to the game's `Mods/KitsuneFlora/` folder for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the repo's `Resources/Bundles/` path, then tagged with `Workspace/tag_bundle_colliders.py` and copied across to the game folder.
 
 ## Author / Repo
 
