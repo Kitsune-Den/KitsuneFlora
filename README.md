@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.4.0-purple)
+![version](https://img.shields.io/badge/version-0.4.1-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.4-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
@@ -30,14 +30,16 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 | Game version | Mod version | State |
 |---|---|---|
-| V3.4 | 0.3.11 | Tested in-game on V3.4.0 (b10): loads clean, plants place, boxwood breaks in one punch and drops wood + seed |
-| V3.3 | 0.3.11 | Same block-loading code as V3.4; not separately play-tested |
-| V3.0 - V3.2 | 0.3.10 or 0.3.11 | 0.3.10 was verified on V3.0 |
-| V2.6 | 0.3.10 or 0.3.11 | 0.3.11 is compatible by design (see "V3.x modding lessons") but has not been re-tested on V2.6 |
+| V3.4 | 0.4.1 | Tested in-game on V3.4.0 (b10): loads clean, plants place, saplings grow to mature trees, boxwood breaks in one punch and drops wood + seed, English names show, trees no longer look lit at night |
+| V3.3 | 0.3.11 or newer | Same block-loading code as V3.4; not separately play-tested |
+| V3.0 - V3.2 | 0.3.10 or newer | 0.3.10 was verified on V3.0 |
+| V2.6 | 0.3.10 or newer | 0.3.11 and newer are compatible by design (see "V3.x modding lessons") but has not been re-tested on V2.6 |
 
 **V3.3 and later need 0.3.11 or newer.** Older builds use dotted `PlantGrowing.Next` property names, which V3.3+ rejects outright.
 
-**Names on V3.x need 0.4.0.** V3.x reads only `Config/Localization.csv`, so 0.3.11 and earlier (which ship only `Localization.txt`) show raw block keys there. 0.4.0 carries the same blocks as 0.3.11 plus the `.csv`; its localization has not yet been checked in-game.
+**Names on V3.x need 0.4.0.** V3.x reads only `Config/Localization.csv`, so 0.3.11 and earlier (which ship only `Localization.txt`) show raw block keys there. 0.4.0 carries the same blocks as 0.3.11 plus the `.csv`. English names and descriptions were checked in-game on V3.4; the 12 translations have not been read by native speakers.
+
+**Trees lit at night are fixed in 0.4.1.** Earlier bundles took ambient light at full strength, so Flora trees stayed bright after dark while vanilla trees went black (see "V3.x modding lessons").
 
 ## Layout
 
@@ -60,6 +62,7 @@ KitsuneFlora/                      ← what ships in the mod
 Workspace/                         ← dev artifacts, NOT shipped in the mod
 ├── WrapTreePrefabs.cs             Unity Editor script: wraps Asset Store prefabs into bundle-safe wrappers + applies scale + strips inner colliders
 ├── tag_bundle_colliders.py        Post-export step: tags every wrapper-root collider T_Block so model blocks can be hit (see "V3.x modding lessons")
+├── tune_bundle_lighting.py        Sets ambient strength / tint on the tree materials in a built bundle, for tuning without a Unity rebuild
 ├── inspect_bundle.py              Verifies each wrapper root points at the mesh it should
 └── IconSources/                   Original kebab-case PNGs (sakura-bloom.png etc.) + parked icons for the future ginko slot
 ```
@@ -166,6 +169,7 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 25 
 
 - **One-punch needs low `MaxDamage`.** The bare fist does 2.2 block damage, so "one punch" means `MaxDamage` of 2 or less; the grove plants use 1.
 - **Template `ModelOffset` is sized for trees.** The grove template's `0,-0.3,0` buries a 0.8-block shrub to a stub; boxwood and fern blocks override it to `0,0,0`.
+- **Tree shaders must not take stock ambient at full strength.** The two tree shaders are plain Lambert surface shaders. With Unity's built-in ambient, every Flora tree (bark included) looked lit at night next to vanilla trees. Turning the material tint down does not fix it: that dims daylight by the same amount, which is why the May 2026 tint change only "improved a little". The shaders now use `noambient` and add ambient back in `surf` as `o.Emission = albedo * ShadeSH9(worldNormal) * _AmbientScale`, so ambient has its own material slider. Shipped values: `_AmbientScale` 0.3, tints at 1.5x the old ones (capped at 1). They are saved in the Unity project's materials; `Workspace/tune_bundle_lighting.py` patches them into a built bundle to try other values without a rebuild. The shader sources live in the Unity project (`Assets/RoadsideTrees/Shaders`), not in this repo.
 
 ## Known log messages
 
@@ -213,7 +217,7 @@ GitHub Actions runs the same suite on every push ~ the `tests` badge above is th
 
 ## Sync workflow (dev → game)
 
-Edits land in `<repo>/KitsuneFlora/` and need to be copied to the game's `Mods/KitsuneFlora/` folder for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter directly into the repo's `Resources/Bundles/` path, then tagged with `Workspace/tag_bundle_colliders.py` and copied across to the game folder.
+Edits land in `<repo>/KitsuneFlora/` and need to be copied to the game's `Mods/KitsuneFlora/` folder for 7DTD to pick them up. The bundle is exported by OCB UnityAssetExporter (select `Assets/Bundles/KitsuneFloraBundle` in the Unity project and use the Inspector's "Export unity3d resource" button) to a folder outside the repo, then tagged with `Workspace/tag_bundle_colliders.py` into the repo's `Resources/Bundles/` path and copied across to the game folder. Don't export straight over the repo's bundle: a raw export is untagged.
 
 ## Author / Repo
 
