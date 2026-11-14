@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.4.2-purple)
+![version](https://img.shields.io/badge/version-0.4.3-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.4-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
@@ -30,7 +30,7 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 | Game version | Mod version | State |
 |---|---|---|
-| V3.4 | 0.4.2 | Tested in-game on V3.4.0 (b10): loads clean, plants place, saplings grow to mature trees, boxwood breaks in one punch and drops wood + seed, English names show, trees no longer look lit at night, tree and sapling hitboxes match their trunks |
+| V3.4 | 0.4.3 | Tested in-game on V3.4.0 (b10): loads clean, plants place, saplings grow to mature trees, boxwood breaks in one punch and drops wood + seed, English names show, trees no longer look lit at night, tree and sapling hitboxes match their trunks |
 | V3.3 | 0.3.11 or newer | Same block-loading code as V3.4; not separately play-tested |
 | V3.0 - V3.2 | 0.3.10 or newer | 0.3.10 was verified on V3.0 |
 | V2.6 | 0.3.10 or newer | 0.3.11 and newer are compatible by design (see "V3.x modding lessons") but has not been re-tested on V2.6 |
@@ -41,7 +41,7 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 **Trees lit at night are fixed in 0.4.1.** Earlier bundles took ambient light at full strength, so Flora trees stayed bright after dark while vanilla trees went black (see "V3.x modding lessons").
 
-**Oversized tree hitboxes are fixed in 0.4.2.** A planted tree seed had an invisible box around it far bigger than the sapling, and grown trees could be targeted while aiming beside the trunk. The boxes now match the trunks (see "V3.x modding lessons").
+**Oversized tree hitboxes are fixed in 0.4.3.** A planted tree seed had an invisible box around it far bigger than the sapling, and grown trees could be targeted while aiming beside the trunk. The boxes now match the trunks (see "V3.x modding lessons"). 0.4.2 fixed the saplings and most trees; the cherry tree needed 0.4.3.
 
 ## Layout
 
@@ -176,7 +176,7 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 25 
 
 ## Known log messages
 
-- **Tree-class blocks are always solid, so their collider must be trunk sized.** Trees and planted tree seeds extend `treeMaster` / `treeMasterGrowing` (shape `DistantDecoTree`). When the model spawns, the game re-tags every collider `T_Deco` and moves it to the tree collision layer, so `Collide="melee"` in blocks.xml does nothing for them, and that collider is also what the crosshair hits. The wrapper boxes used to be far wider than the trunks: saplings had a box about 1 m wide and up to 3.5 m tall (an invisible wall around a freshly planted seed), a cherry tree a 0.8 m box around a 0.4 m trunk, a dogwood a 0.8 m box around a 0.15 m trunk. Trees can sit at 45 degrees, so a box corner sticks out further, and tools aim with a small sphere cast on top of that: you could target a tree while aiming well beside it. The boxes are now roughly the trunk (saplings 0.3 m, cherry 0.6 m, dogwood 0.3 m, keyaki 0.55 m, plane tree 0.4 m, black pine 1 m). The sizes are saved in the Unity wrapper prefabs and in `WrapTreePrefabs.cs`; `Workspace/fit_tree_colliders.py` patches a bundle built before that. Crop-class seeds (boxwood, ferns, planted bamboo) are unaffected: `Collide="melee"` works there.
+- **Tree-class blocks are always solid, so their collider must be trunk sized.** Trees and planted tree seeds extend `treeMaster` / `treeMasterGrowing` (shape `DistantDecoTree`). When the model spawns, the game re-tags every collider `T_Deco` and moves it to the tree collision layer, so `Collide="melee"` in blocks.xml does nothing for them, and that collider is also what the crosshair hits. The wrapper boxes used to be far wider than the trunks: saplings had a box about 1 m wide and up to 3.5 m tall (an invisible wall around a freshly planted seed), a cherry tree a 0.8 m box around a 0.4 m trunk, a dogwood a 0.8 m box around a 0.15 m trunk. Trees can sit at 45 degrees, so a box corner sticks out further, and tools aim with a small sphere cast on top of that: you could target a tree while aiming well beside it. The boxes are now roughly the trunk (saplings 0.3 m, cherry 0.4 m, dogwood 0.3 m, keyaki 0.55 m, plane tree 0.4 m, black pine 1 m). A box does not have to sit on the block centre: the cherry trunk leans about 0.13 m off centre at chest height, so its box is centred on the trunk there. 0.4.2 shipped the cherry with a 0.6 m box on the block centre, which still left empty box beside the trunk. The sizes are saved in the Unity wrapper prefabs and in `WrapTreePrefabs.cs`; `Workspace/fit_tree_colliders.py` patches a bundle built before that. Crop-class seeds (boxwood, ferns, planted bamboo) are unaffected: `Collide="melee"` works there.
 
 **`Block 'treeKitsuneXxx' needs a deco shape assigned but has not!`** ~ harmless, by design.
 
