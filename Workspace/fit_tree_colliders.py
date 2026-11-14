@@ -35,7 +35,8 @@ import sys
 
 import UnityPy
 
-# wrapper root name -> (width, height, depth) in metres; the box sits on the ground
+# wrapper root name -> (width, height, depth[, centre x, centre z]) in metres.
+# The box sits on the ground; centre x/z default to 0 (the middle of the block).
 TREE_BOXES = {
     # saplings and the mid black pine
     "treeKitsuneSakuraSmallRoot": (0.3, 2.2, 0.3),
@@ -46,8 +47,10 @@ TREE_BOXES = {
     "treeKitsuneBlackPineSmallRoot": (0.3, 1.0, 0.3),
     "treeKitsuneBlackPineMidRoot": (0.4, 2.5, 0.4),
     # mature trees; trunk width measured 0.2 m to 1.8 m above the ground
-    "treeKitsuneSakuraRoot": (0.6, 6.5, 0.6),        # trunk 0.35-0.45, leans a little
-    "treeKitsuneSakuraLeafRoot": (0.6, 6.5, 0.6),
+    # The cherry trunk leans: between 0.9 m and 1.8 m up it spans x -0.31..0.04,
+    # z -0.08..0.34, so the box is centred on that, not on the block.
+    "treeKitsuneSakuraRoot": (0.4, 6.5, 0.4, -0.13, 0.13),
+    "treeKitsuneSakuraLeafRoot": (0.4, 6.5, 0.4, -0.13, 0.13),
     "treeKitsuneDogwoodRoot": (0.3, 4.4, 0.3),       # trunk 0.15-0.2
     "treeKitsuneDogwoodLeafRoot": (0.3, 4.4, 0.3),
     "treeKitsuneKeyakiRoot": (0.55, 11.0, 0.55),     # trunk 0.45-0.6
@@ -85,7 +88,11 @@ def main():
         seen.add(name)
         size, center = d["m_Size"], d["m_Center"]
         have = (size["x"], size["y"], size["z"])
-        ok = all(abs(h - w) < 1e-4 for h, w in zip(have, want)) and abs(center["y"] - want[1] / 2) < 1e-4
+        cx, cz = (want[3], want[4]) if len(want) == 5 else (0.0, 0.0)
+        want = want[:3]
+        ok = (all(abs(h - w) < 1e-4 for h, w in zip(have, want))
+              and abs(center["x"] - cx) < 1e-4 and abs(center["y"] - want[1] / 2) < 1e-4
+              and abs(center["z"] - cz) < 1e-4)
         if ok:
             print(f"  ok        {name}")
             continue
@@ -94,7 +101,7 @@ def main():
         print(f"  {'MISFIT  ' if check else 'fitting  '} {name}  ({fmt(have)} -> {fmt(want)})")
         if not check:
             size["x"], size["y"], size["z"] = want
-            center["x"], center["y"], center["z"] = 0.0, want[1] / 2, 0.0
+            center["x"], center["y"], center["z"] = cx, want[1] / 2, cz
             o.save_typetree(d)
 
     missing = sorted(set(TREE_BOXES) - seen)
