@@ -43,6 +43,36 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 **Oversized tree hitboxes are fixed in 0.4.3.** A planted tree seed had an invisible box around it far bigger than the sapling, and grown trees could be targeted while aiming beside the trunk. The boxes now match the trunks (see "V3.x modding lessons"). 0.4.2 fixed the saplings and most trees; the cherry tree needed 0.4.3.
 
+### Adding Flora to a world you already play
+
+In testing this was safe on a healthy save and went wrong when the save's block ID map (`blockmappings.nim`) did not load. One player hit it with the map file present, so treat an existing save as a risk and load Flora last if anything looks swapped.
+
+What happens: the save records a name for every block ID it has stored, and the game uses that map to keep those IDs fixed when the mod list changes. Without the map the game hands out IDs in load order. Flora adds 29 blocks and its folder loads alphabetically before a lot of other mods, so every block from those mods moves 29 slots and the save shows the wrong block in their place.
+
+Reported case (November 2026, Flora 0.4.1 on V3.3.0 with MPLogue's Urban Decay): giant floating advertisement signs along roads. In Urban Decay's block list the street lights and electric meter boxes sit exactly 29 slots after its billboards.
+
+Tested on a V3.3.0 dedicated server (world Pregen06k01, Urban Decay 3.1, Flora 0.4.1). A town was generated with Urban Decay alone, then the block ID table was dumped before and after each change:
+
+| Change to the save | Result |
+|---|---|
+| Add Flora, map intact | All 538 Urban Decay blocks already in the save keep their IDs, street lights included. Only blocks the save had never stored move |
+| Add Flora, `blockmappings.nim` missing | All 1189 later blocks move by exactly 29. `mpl_udx_streetLight01` becomes `mpl_billboard_41_9x6`, `mpl_udg_streetLight01` becomes `mpl_ud_Billboard_Rotate_01`, meter boxes become billboards 16 to 40 |
+| Same, folder renamed `zzz_KitsuneFlora` | Nothing moves |
+
+This was checked through the ID tables, not by looking at the world in a client.
+
+The reporter confirmed the rename in play: with the folder as `zzz_KitsuneFlora` the billboards were gone from the areas they checked, on the same save, without deleting anything. Their `blockmappings.nim` was present (about 281 KB), so in their case either the map did not load or the affected blocks were never recorded in it. Which one is not known.
+
+How to tell: the log of an affected session has `Could not load block-name-mappings file` or `Block IDs withOUT mapping`. A healthy one says `Block IDs with mapping`.
+
+If you see something like this:
+
+1. Restore a backup of the save from before Flora was added, and check it contains `blockmappings.nim`.
+2. If that does not help or there is no backup, rename the mod folder so it loads last, for example `zzz_KitsuneFlora`. Its blocks then take IDs after every other mod.
+3. Do not rename the folder on a world that was started with Flora installed. That can move the IDs the other way.
+
+Nothing in Flora's own files touches signs, and newer Flora versions do not change this: it is how the game assigns IDs. Any mod that adds blocks behaves the same way.
+
 ## Layout
 
 ```
