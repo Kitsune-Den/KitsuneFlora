@@ -35,9 +35,9 @@ public static class WrapTreePrefabs
         // Trunk-sized collider ~ matches MultiBlockDim 1x1 base and
         // keeps HP-bar attached to the right block when chopping.
         // ============================================================
-        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_flower_roadside_1.prefab", "treeKitsuneSakuraRoot",          0.4f, 6.5f, 3.25f, 1f),
-        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_leaf_roadside_1.prefab",   "treeKitsuneSakuraLeafRoot",      0.4f, 6.5f, 3.25f, 1f),
-        ("Assets/RoadsideTrees/Prefabs/Keyaki_L.prefab",                        "treeKitsuneKeyakiRoot",          0.4f, 11f,  5.5f,  1f),
+        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_flower_roadside_1.prefab", "treeKitsuneSakuraRoot",          0.2f, 6.5f, 3.25f, 1f),
+        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_leaf_roadside_1.prefab",   "treeKitsuneSakuraLeafRoot",      0.2f, 6.5f, 3.25f, 1f),
+        ("Assets/RoadsideTrees/Prefabs/Keyaki_L.prefab",                        "treeKitsuneKeyakiRoot",          0.275f, 11f,  5.5f,  1f),
 
         // ============================================================
         // Phase B mature trees ~ one variant each, no Sml/Med Asset Store
@@ -45,20 +45,22 @@ public static class WrapTreePrefabs
         // variants (matching the sakura two-state pattern). Plane_tree
         // is actually the ginkgo (Asset Store mistranslation).
         // ============================================================
-        ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodRoot",         0.4f, 6f,   3f,    1f),
-        ("Assets/RoadsideTrees/Prefabs/Dogwood_white.prefab",                   "treeKitsuneDogwoodLeafRoot",     0.4f, 6f,   3f,    1f),
-        ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeRoot",       0.5f, 10f,  5f,    1f),
+        ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodRoot",         0.15f, 4.4f,   2.2f,    1f),
+        ("Assets/RoadsideTrees/Prefabs/Dogwood_white.prefab",                   "treeKitsuneDogwoodLeafRoot",     0.15f, 4.4f,   2.2f,    1f),
+        ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeRoot",       0.2f, 7f,  3.5f,    1f),
         // Azalea_wide parked ~ flat-bush mesh fights with 7DTD voxel rendering
         // ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                  "treeKitsuneAzaleaRoot",          0.6f, 2.5f, 1.25f, 1f),
 
         // ============================================================
         // Small variants ~ wrapped at 0.35 localScale to read as saplings.
         // Collider params describe the FINAL (post-scale) size in world meters.
-        // Hitbox radius bumped to ~0.5m wide so melee aim isn't a needle-thread.
+        // Tree saplings are tree-class blocks: the game forces their colliders
+        // solid, so the box must be trunk sized (0.3m wide) or a planted seed gets
+        // an invisible wall around it. Do not widen these for easier melee aim.
         // ============================================================
-        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_flower_roadside_2.prefab", "treeKitsuneSakuraSmallRoot",     0.5f, 2.2f, 1.1f,  0.35f),
-        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_leaf_roadside_2.prefab",   "treeKitsuneSakuraLeafSmallRoot", 0.5f, 2.2f, 1.1f,  0.35f),
-        ("Assets/RoadsideTrees/Prefabs/Keyaki_S.prefab",                        "treeKitsuneKeyakiSmallRoot",     0.6f, 2.8f, 1.4f,  0.35f),
+        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_flower_roadside_2.prefab", "treeKitsuneSakuraSmallRoot",     0.15f, 2.2f, 1.1f,  0.35f),
+        ("Assets/RoadsideTrees/Prefabs/CherryBlossom_leaf_roadside_2.prefab",   "treeKitsuneSakuraLeafSmallRoot", 0.15f, 2.2f, 1.1f,  0.35f),
+        ("Assets/RoadsideTrees/Prefabs/Keyaki_S.prefab",                        "treeKitsuneKeyakiSmallRoot",     0.15f, 2.5f, 1.25f,  0.35f),
 
         // ============================================================
         // Phase B small variants ~ pack has no _S/_2 for these, so we
@@ -66,8 +68,8 @@ public static class WrapTreePrefabs
         // visual. Same trick as sakura, just without an Asset-Store-
         // dedicated small-variant mesh.
         // ============================================================
-        ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodSmallRoot",    0.5f, 2.1f, 1.05f, 0.35f),
-        ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeSmallRoot",  0.5f, 3.5f, 1.75f, 0.35f),
+        ("Assets/RoadsideTrees/Prefabs/Dogwood_pink.prefab",                    "treeKitsuneDogwoodSmallRoot",    0.15f, 1.5f, 0.75f, 0.35f),
+        ("Assets/RoadsideTrees/Prefabs/Plane_tree_roadside.prefab",             "treeKitsunePlaneTreeSmallRoot",  0.15f, 2.6f, 1.3f, 0.35f),
         // ("Assets/RoadsideTrees/Prefabs/Azalea_wide.prefab",                  "treeKitsuneAzaleaSmallRoot",     0.4f, 0.4f, 0.2f,  0.35f),
 
         // ============================================================
@@ -78,24 +80,19 @@ public static class WrapTreePrefabs
         // ============================================================
 
         // -- Bamboo _01 set: the plantable 3-stage growth chain --
-        // Collider radius HALVED in v0.3.8 ~ bamboo trunks are visually
-        // narrow and the previous 0.3-0.4m radius blocked the player from
-        // walking through groves convincingly. Trimming to ~0.15-0.2m
-        // leaves a hit-target for melee but lets the player squeeze past.
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_01.prefab",      "treeKitsuneBambooSmallRoot",     0.15f, 1.5f, 0.75f, 1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_01.prefab",        "treeKitsuneBambooMidRoot",       0.18f, 3f,   1.5f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_01.prefab",        "treeKitsuneBambooRoot",          0.2f,  5f,   2.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_01.prefab",      "treeKitsuneBambooSmallRoot",     0.3f,  1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_01.prefab",        "treeKitsuneBambooMidRoot",       0.35f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_01.prefab",        "treeKitsuneBambooRoot",          0.4f,  5f,   2.5f,  1f),
 
         // -- Bamboo _02 set: wild-grove decoration variety (no growth) --
-        // Same halved collider radius as the _01 set; see comment above.
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_02.prefab",      "treeKitsuneBambooWildSmallRoot", 0.15f, 1.5f, 0.75f, 1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_02.prefab",        "treeKitsuneBambooWildMidRoot",   0.18f, 3f,   1.5f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_02.prefab",        "treeKitsuneBambooWildBigRoot",   0.2f,  5f,   2.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Small_Green_02.prefab",      "treeKitsuneBambooWildSmallRoot", 0.3f,  1.5f, 0.75f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Mid_Green_02.prefab",        "treeKitsuneBambooWildMidRoot",   0.35f, 3f,   1.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/Bamboo/Tree_Bamboo_Big_Green_02.prefab",        "treeKitsuneBambooWildBigRoot",   0.4f,  5f,   2.5f,  1f),
 
         // -- Black Pine: one set, 3-stage growth chain --
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Small_Green_01.prefab","treeKitsuneBlackPineSmallRoot",  0.4f,  1f,   0.5f,  1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Mid_Green_01.prefab",  "treeKitsuneBlackPineMidRoot",    0.6f,  2.5f, 1.25f, 1f),
-        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Big_Green_01.prefab",  "treeKitsuneBlackPineRoot",       1f,    5f,   2.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Small_Green_01.prefab","treeKitsuneBlackPineSmallRoot",  0.15f,  1f,   0.5f,  1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Mid_Green_01.prefab",  "treeKitsuneBlackPineMidRoot",    0.2f,  2.5f, 1.25f, 1f),
+        ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Trees/BlackPine/Tree_BlackPine_Big_Green_01.prefab",  "treeKitsuneBlackPineRoot",       0.5f,    5f,   2.5f,  1f),
 
         // -- Boxwood: 3 variety variants, all "Boxwood Shrub" --
         ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/Boxwood/Plant_Boxwood_Spring_01.prefab",       "treeKitsuneBoxwoodRoot",         0.5f,  1f,   0.5f,  1f),
@@ -118,6 +115,22 @@ public static class WrapTreePrefabs
         // borrowed the vanilla oak sprout and was visually identical to the
         // boxwood seed. Collider params are pre-scaled (final world size).
         ("Assets/Waldemarst/FreeJapaneseGarden/Prefabs/Plants/PaintedFern/Plant_PaintedFern_Spring_01.prefab","treeKitsunePaintedFernSmallRoot",0.4f,  0.3f, 0.15f, 0.5f),
+
+        // ============================================================
+        // Flowers ~ our own meshes, generated by Workspace/build_flowers.py.
+        // Copy Workspace/FlowerMeshes/*.fbx and flowers_palette.png into
+        // Assets/KitsuneFlowers/ first. The sources are model files, not
+        // prefabs; the FBX root is named after the file (treeKitsuneX),
+        // so the ...Root wrapper name stays unique. Real seed-stage
+        // meshes, so scale is 1 throughout. Collider values are first-pass
+        // estimates from the mesh sizes.
+        // ============================================================
+        ("Assets/KitsuneFlowers/treeKitsuneSpiderLily.fbx",      "treeKitsuneSpiderLilyRoot",      0.4f,  0.9f,  0.45f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneSpiderLilySmall.fbx", "treeKitsuneSpiderLilySmallRoot", 0.15f, 0.32f, 0.16f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneHydrangea.fbx",       "treeKitsuneHydrangeaRoot",       0.4f,  0.8f,  0.4f,   1f),
+        ("Assets/KitsuneFlowers/treeKitsuneHydrangeaSmall.fbx",  "treeKitsuneHydrangeaSmallRoot",  0.2f,  0.3f,  0.15f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneCamellia.fbx",        "treeKitsuneCamelliaRoot",        0.4f,  1.5f,  0.75f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneCamelliaSmall.fbx",   "treeKitsuneCamelliaSmallRoot",   0.15f, 0.35f, 0.175f, 1f),
     };
 
     [MenuItem("Tools/Kitsune/Wrap Tree Prefabs With Unique Roots")]
@@ -185,6 +198,9 @@ public static class WrapTreePrefabs
                 // Add BoxCollider on the wrapper root.
                 var box = wrapper.AddComponent<BoxCollider>();
                 box.center = new Vector3(0f, centerY, 0f);
+                // The mature cherry trunk leans away from the block centre; follow it.
+                if (newName == "treeKitsuneSakuraRoot" || newName == "treeKitsuneSakuraLeafRoot")
+                    box.center = new Vector3(-0.13f, centerY, 0.13f);
                 box.size = new Vector3(radius * 2f, height, radius * 2f);
                 box.isTrigger = false;
 
@@ -230,6 +246,9 @@ public static class WrapTreePrefabs
         foreach (var (sourcePath, _, _, _, _, _) in Targets)
         {
             if (!seen.Add(sourcePath)) continue;
+            // Model files (our own flower FBX) carry no scripts and cannot be
+            // opened as prefab contents.
+            if (!sourcePath.EndsWith(".prefab")) continue;
 
             var contents = PrefabUtility.LoadPrefabContents(sourcePath);
             if (contents == null)
