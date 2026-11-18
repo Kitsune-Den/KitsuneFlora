@@ -560,6 +560,155 @@
         </block>
 
         <!-- ============================================================
+             FLOWERS (v0.5) ~ spider lily, hydrangea, camellia
+             ============================================================
+             Same two-block pattern as boxwood and painted fern: a crop-base
+             seed that grows into a treeKitsuneGroveMaster model block.
+             The wrapper names below (treeKitsuneXxxRoot / XxxSmallRoot)
+             must exist in the bundle before these blocks can ship.
+        -->
+        <!-- ============================================================
+             SPIDER LILY (Higanbana) ~ red autumn bulb flower
+             ============================================================
+             Low flower on a bare stem. Plants in dense drifts.
+             Decor only: no wood, the flower just gives its seed back.
+        -->
+        <block name="treeKitsuneSpiderLily">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSpiderLilyRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="CustomIcon" value="treeKitsuneSpiderLily"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Destroy" name="treePlantedKitsuneSpiderLily1m" count="1"/>
+            <property name="EconomicValue" value="8"/>
+        </block>
+
+        <block name="treePlantedKitsuneSpiderLily1m">
+            <!-- See treePlantedKitsuneBamboo1m: cropsGrowingMaster is the
+                 crop-row base so flowers can be planted side by side. -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneSpiderLily"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
+            <property name="DescriptionKey" value="treePlantedKitsuneSpiderLily1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneSpiderLilySmallRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="5"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="1"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneSpiderLily1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             HYDRANGEA (Ajisai) ~ rainy-season flowering shrub
+             ============================================================
+             Rounded shrub with big flower clusters. Plants in dense borders.
+             Decor only: no wood, the flower just gives its seed back.
+        -->
+        <block name="treeKitsuneHydrangea">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneHydrangeaRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="CustomIcon" value="treeKitsuneHydrangea"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Destroy" name="treePlantedKitsuneHydrangea1m" count="1"/>
+            <property name="EconomicValue" value="12"/>
+        </block>
+
+        <block name="treePlantedKitsuneHydrangea1m">
+            <!-- See treePlantedKitsuneBamboo1m: cropsGrowingMaster is the
+                 crop-row base so flowers can be planted side by side. -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneHydrangea"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
+            <property name="DescriptionKey" value="treePlantedKitsuneHydrangea1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneHydrangeaSmallRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="7"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="1"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneHydrangea1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
+             CAMELLIA (Tsubaki) ~ evergreen winter-flowering shrub
+             ============================================================
+             Glossy evergreen shrub. Plants in dense hedges.
+             Decor only: no wood, the flower just gives its seed back.
+        -->
+        <block name="treeKitsuneCamellia">
+            <property name="Extends" value="treeKitsuneGroveMaster"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneCamelliaRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="CustomIcon" value="treeKitsuneCamellia"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="BigDecorationRadius" value="0"/>
+            <drop event="Destroy" name="treePlantedKitsuneCamellia1m" count="1"/>
+            <property name="EconomicValue" value="14"/>
+        </block>
+
+        <block name="treePlantedKitsuneCamellia1m">
+            <!-- See treePlantedKitsuneBamboo1m: cropsGrowingMaster is the
+                 crop-row base so flowers can be planted side by side. -->
+            <property name="Extends" value="cropsGrowingMaster" param1="CustomIcon"/>
+            <property name="CreativeMode" value="Player"/>
+            <property name="FallOver" value="false"/>
+            <property name="PlaceAsRandomRotation" value="true"/>
+            <property class="PlantGrowing">
+                <property name="Next" value="treeKitsuneCamellia"/>
+                <property name="FertileLevel" value="1"/>
+            </property>
+            <property name="DescriptionKey" value="treePlantedKitsuneCamellia1mDesc"/>
+            <property name="Material" value="Mplants"/>
+            <property name="Shape" value="ModelEntity"/>
+            <property name="Model" value="#@modfolder:Resources/Bundles/KitsuneFlora.unity3d?treeKitsuneCamelliaSmallRoot"/>
+            <property name="ModelOffset" value="0,0,0"/>
+            <property name="MultiBlockDim" value="1,2,1"/>
+            <property name="ParticleOnDeath" value="treeGib_sapling"/>
+            <property name="Collide" value="melee"/>
+            <property name="StabilitySupport" value="false"/>
+            <property name="EconomicValue" value="8"/>
+            <property name="EconomicBundleSize" value="5"/>
+            <property name="SellableToTrader" value="false"/>
+            <property name="MaxDamage" value="1"/>
+            <property name="ActivationDistance" value="4"/>
+            <dropextendsoff/>
+            <drop event="Harvest" name="treePlantedKitsuneCamellia1m" count="1" tag="lumberjackHarvest"/>
+        </block>
+
+        <!-- ============================================================
              WILD-GROVE VARIETY BLOCKS
              ============================================================
              Decoration-only variants that share their base type's name,
