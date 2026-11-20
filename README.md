@@ -4,7 +4,7 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.5.0-purple)
+![version](https://img.shields.io/badge/version-0.5.1-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.4-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
@@ -30,7 +30,7 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 | Game version | Mod version | State |
 |---|---|---|
-| V3.4 | 0.5.0 | Flowers checked in-game on V3.4.0 (b10): mod loads clean, all three place from the creative menu, render from every side and sway. Not yet checked: picking one for its seed, growing from seed, look at night, wild spawns, loot and trader stock. Trees and garden plants use the same meshes and hitboxes as 0.4.3 |
+| V3.4 | 0.5.1 | Same as 0.5.0 with painted ferns that sway visibly. Flowers checked in-game on V3.4.0 (b10): mod loads clean, all three place from the creative menu, render from every side and sway. Not yet checked: picking one for its seed, growing from seed, look at night, wild spawns, loot and trader stock. Trees and garden plants use the same meshes and hitboxes as 0.4.3 |
 | V3.4 | 0.4.3 | Tested in-game on V3.4.0 (b10): loads clean, plants place, saplings grow to mature trees, boxwood breaks in one punch and drops wood + seed, English names show, trees no longer look lit at night, tree and sapling hitboxes match their trunks |
 | V3.3 | 0.3.11 or newer | Same block-loading code as V3.4; not separately play-tested |
 | V3.0 - V3.2 | 0.3.10 or newer | 0.3.10 was verified on V3.0 |
@@ -41,6 +41,8 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 **Names on V3.x need 0.4.0.** V3.x reads only `Config/Localization.csv`, so 0.3.11 and earlier (which ship only `Localization.txt`) show raw block keys there. 0.4.0 carries the same blocks as 0.3.11 plus the `.csv`. English names and descriptions were checked in-game on V3.4; the 12 translations have not been read by native speakers.
 
 **Trees lit at night are fixed in 0.4.1.** Earlier bundles took ambient light at full strength, so Flora trees stayed bright after dark while vanilla trees went black (see "V3.x modding lessons").
+
+**Painted ferns sway from 0.5.1.** They were on the wind shader all along, but their settings left about 5 mm of movement at the frond tips, which reads as still (see "V3.x modding lessons").
 
 **Oversized tree hitboxes are fixed in 0.4.3.** A planted tree seed had an invisible box around it far bigger than the sapling, and grown trees could be targeted while aiming beside the trunk. The boxes now match the trunks (see "V3.x modding lessons"). 0.4.2 fixed the saplings and most trees; the cherry tree needed 0.4.3.
 
@@ -218,6 +220,8 @@ Verification with UnityPy: bundle's top-level GameObjects should include all 33 
 - **One-punch needs low `MaxDamage`.** The bare fist does 2.2 block damage, so "one punch" means `MaxDamage` of 2 or less; the grove plants use 1.
 - **Template `ModelOffset` is sized for trees.** The grove template's `0,-0.3,0` buries a 0.8-block shrub to a stub; boxwood and fern blocks override it to `0,0,0`.
 - **Tree shaders must not take stock ambient at full strength.** The two tree shaders are plain Lambert surface shaders. With Unity's built-in ambient, every Flora tree (bark included) looked lit at night next to vanilla trees. Turning the material tint down does not fix it: that dims daylight by the same amount, which is why the May 2026 tint change only "improved a little". The shaders now use `noambient` and add ambient back in `surf` as `o.Emission = albedo * ShadeSH9(worldNormal) * _AmbientScale`, so ambient has its own material slider. Shipped values: `_AmbientScale` 0.3, tints at 1.5x the old ones (capped at 1). They are saved in the Unity project's materials; `Workspace/tune_bundle_lighting.py` patches them into a built bundle to try other values without a rebuild. The shader sources live in the Unity project (`Assets/RoadsideTrees/Shaders`), not in this repo.
+
+- **Wind height start must sit below a short plant.** The wind shader keeps everything under `_WindHeightStart` still and ramps sway in slowly above it: displacement is `_WindStrength * (height - start) * 0.5`, capped at `_WindStrength`. The painted fern tops out at 0.44 m and shipped with a start of 0.18 and strength 0.042, which is about 5 mm at the tips. From 0.5.1 it uses start 0 and strength 0.09, about 20 mm, in line with the flowers. Boxwood (0.76 m tall, start 0.3, strength 0.034) still moves only about 8 mm. The values are saved in the Unity project's materials.
 
 ## Known log messages
 
