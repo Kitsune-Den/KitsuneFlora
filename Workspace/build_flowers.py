@@ -46,6 +46,10 @@ BANDS = [
     ("cam_petal",  (0.50, 0.02, 0.07), (0.92, 0.11, 0.17)),
     ("cam_stamen", (0.85, 0.58, 0.05), (1.00, 0.86, 0.22)),
     ("wood",       (0.15, 0.10, 0.06), (0.30, 0.22, 0.13)),
+    ("iris_leaf",  (0.07, 0.19, 0.10), (0.28, 0.45, 0.22)),   # iris
+    ("iris_petal", (0.14, 0.04, 0.40), (0.46, 0.32, 0.86)),
+    ("iris_signal", (0.95, 0.72, 0.08), (1.00, 0.93, 0.50)),
+    ("az_petal",   (0.58, 0.03, 0.28), (0.98, 0.40, 0.64)),   # azalea
 ]
 BAND_INDEX = {name: i for i, (name, _, _) in enumerate(BANDS)}
 
@@ -140,6 +144,19 @@ class MeshBuilder:
             self.uvs.append(((u0, t0), (um, t0), (um, t1), (u0, t1)))
             self.faces.append((a + 1, a + 2, a + 5, a + 4))
             self.uvs.append(((um, t0), (u1, t0), (u1, t1), (um, t1)))
+
+    def strip(self, pts, widths, sides, band):
+        """Flat strip like ribbon, but with its own across direction per point."""
+        u0, u1 = self._u(band)
+        base = len(self.verts)
+        for p, w, sd in zip(pts, widths, sides):
+            self.verts += [p - sd * (w / 2), p + sd * (w / 2)]
+        n = len(pts)
+        for i in range(n - 1):
+            a = base + 2 * i
+            t0, t1 = self._v(i / (n - 1)), self._v((i + 1) / (n - 1))
+            self.faces.append((a, a + 1, a + 3, a + 2))
+            self.uvs.append(((u0, t0), (u1, t0), (u1, t1), (u0, t1)))
 
     def tube(self, pts, radii, band, sides=3, vr=(0.0, 1.0)):
         u0, u1 = self._u(band)
@@ -412,6 +429,177 @@ def camellia_small(mb, rng):
     camellia_branch(mb, rng, pts, 9, [0.008, 0.007, 0.006, 0.005, 0.004, 0.003], start=0.2)
 
 
+# ---------- iris (ayame, Iris sanguinea) ----------------------------------
+
+IRIS_LEAF = (0.55, 0.95, 1.0, 1.0, 0.95, 0.85, 0.65, 0.35, 0.0)
+
+
+def iris_blade(mb, rng, base, fan, phi, length, width):
+    """Sword leaf standing in the fan's plane, arching outward toward the tip."""
+    bend = math.radians(rng.uniform(8, 22)) * (1 if phi >= 0 else -1)
+    if abs(phi) < 0.05:
+        bend *= rng.choice((-0.5, 0.5))
+    n = len(IRIS_LEAF)
+    p, pts, sides = base.copy(), [], []
+    for i in range(n):
+        a = phi + bend * (i / (n - 1)) ** 1.5
+        tan = UP * math.cos(a) + fan * math.sin(a)
+        pts.append(p.copy())
+        sides.append(fan * math.cos(a) - UP * math.sin(a))
+        p = p + tan * (length / (n - 1))
+    mb.strip(pts, [w * width for w in IRIS_LEAF], sides, "iris_leaf")
+
+
+def iris_fan(mb, rng, base, leaves, length):
+    az = rng.uniform(0, math.pi)
+    fan = Vector((math.cos(az), math.sin(az), 0))
+    spread = math.radians(rng.uniform(10, 16))
+    for k in range(leaves):
+        phi = spread * (k - (leaves - 1) / 2) + rng.uniform(-0.04, 0.04)
+        size = 1.0 - 0.35 * abs(k - (leaves - 1) / 2) / max(1, leaves / 2)
+        off = fan * (0.006 * (k - (leaves - 1) / 2))
+        iris_blade(mb, rng, base + off, fan, phi, length * size * rng.uniform(0.9, 1.05),
+                   rng.uniform(0.020, 0.026))
+
+
+def iris_flower(mb, rng, base, axis):
+    """Three falls arching out and down, three standards held upright."""
+    e1, e2 = perp_frame(axis)
+    spin = rng.uniform(0, 2 * math.pi)
+    for j in range(3):
+        psi = spin + 2 * math.pi * j / 3
+        radial = e1 * math.cos(psi) + e2 * math.sin(psi)
+        side = axis.cross(radial).normalized()
+        length = rng.uniform(0.075, 0.09)
+        steps = 6
+        th0, th1 = math.radians(60), math.radians(rng.uniform(140, 160))
+        p, pts = base.copy(), [base.copy()]
+        for i in range(steps):
+            th = th0 + (th1 - th0) * ((i + 0.5) / steps) ** 1.3
+            p = p + (axis * math.cos(th) + radial * math.sin(th)) * (length / steps)
+            pts.append(p.copy())
+        mb.ribbon(pts, [w * 0.05 for w in (0.25, 0.55, 0.9, 1.0, 0.95, 0.7, 0.3)], side, "iris_petal")
+        lift = axis * 0.0025
+        mb.ribbon([q + lift for q in pts[1:5]], [w * 0.05 for w in (0.15, 0.35, 0.35, 0.05)],
+                  side, "iris_signal")
+    for j in range(3):
+        psi = spin + 2 * math.pi * (j + 0.5) / 3
+        radial = e1 * math.cos(psi) + e2 * math.sin(psi)
+        side = axis.cross(radial).normalized()
+        length = rng.uniform(0.055, 0.065)
+        p, pts = base.copy(), [base.copy()]
+        for i in range(4):
+            th = math.radians(12 + 22 * (i + 0.5) / 4)
+            p = p + (axis * math.cos(th) + radial * math.sin(th)) * (length / 4)
+            pts.append(p.copy())
+        mb.ribbon(pts, [w * 0.03 for w in (0.2, 0.7, 1.0, 0.85, 0.3)], side, "iris_petal")
+
+
+def iris_stalk(mb, rng, base, height, bud=False):
+    lean = Vector((rng.uniform(-0.04, 0.04), rng.uniform(-0.04, 0.04), 0))
+    pts = stem_points(base, height, lean)
+    mb.tube(pts, [0.0050, 0.0046, 0.0042, 0.0038, 0.0035, 0.0032], "iris_leaf", sides=4)
+    top = pts[-1]
+    tan = (pts[-1] - pts[-2]).normalized()
+    p, d = sample(pts, 0.55)
+    mb.leaf(p, d + Vector((lean.x, lean.y, 0)) * 3, 0.10, 0.012, "iris_leaf", droop=0.1, fold=0.0)
+    if bud:
+        bp = [top + tan * (0.07 * t) for t in (0, 0.2, 0.5, 0.8, 1.0)]
+        mb.tube(bp, [0.004, 0.009, 0.010, 0.007, 0.001], "iris_petal", sides=5, vr=(0.2, 0.6))
+        return
+    mb.tube([top, top + tan * 0.02], [0.0045, 0.006], "iris_leaf", sides=4)
+    iris_flower(mb, rng, top + tan * 0.02, tan)
+
+
+def iris(mb, rng):
+    for base in scatter(rng, 6, 0.26, 0.11):
+        iris_fan(mb, rng, base, rng.choice((5, 6, 7)), rng.uniform(0.50, 0.66))
+    for i, base in enumerate(scatter(rng, 8, 0.24, 0.07)):
+        iris_stalk(mb, rng, base, rng.uniform(0.62, 0.82), bud=(i >= 6))
+
+
+def iris_small(mb, rng):
+    for base in scatter(rng, 2, 0.06, 0.05):
+        iris_fan(mb, rng, base, rng.choice((3, 4)), rng.uniform(0.22, 0.30))
+
+
+# ---------- azalea (tsutsuji, clipped satsuki mound) ----------------------
+
+AZ_LEAF = (0.2, 1.0, 0.7, 0.05)
+AZ_PETAL = (0.3, 0.9, 1.0, 0.55)
+
+
+def azalea_leaves(mb, rng, tip, axis, count, size=1.0):
+    e1, e2 = perp_frame(axis)
+    spin = rng.uniform(0, 2 * math.pi)
+    for k in range(count):
+        a = spin + 2 * math.pi * k / count + rng.uniform(-0.3, 0.3)
+        out = e1 * math.cos(a) + e2 * math.sin(a)
+        s = size * rng.uniform(0.85, 1.15)
+        mb.leaf(tip - axis * 0.02, out * 0.9 + axis * 0.28, 0.07 * s, 0.032 * s, "cam_leaf",
+                droop=rng.uniform(0.1, 0.3), fold=0.1, profile=AZ_LEAF)
+
+
+def azalea_flower(mb, rng, base, axis):
+    """Five-lobed open funnel with a few stamens."""
+    e1, e2 = perp_frame(axis)
+    spin = rng.uniform(0, 2 * math.pi)
+    for j in range(5):
+        a = spin + 2 * math.pi * j / 5
+        r = e1 * math.cos(a) + e2 * math.sin(a)
+        th = math.radians(rng.uniform(50, 62))
+        d = axis * math.cos(th) + r * math.sin(th)
+        side = axis.cross(r).normalized()
+        normal = side.cross(d).normalized()
+        if normal.dot(axis) < 0:
+            normal = -normal
+        mb.leaf(base, d, 0.038, 0.034, "az_petal", droop=-0.2, fold=0.12,
+                side=side, normal=normal, profile=AZ_PETAL)
+    mb.tube([base, base + axis * 0.026], [0.0012, 0.0016], "stamen", sides=3)
+
+
+def azalea(mb, rng):
+    centre_z, rx, rz = 0.20, 0.40, 0.34
+    core = [Vector((0, 0, centre_z + rz * z)) for z in (-0.55, -0.3, 0.0, 0.35, 0.7, 0.9)]
+    mb.tube(core, [rx * r for r in (0.74, 0.84, 0.84, 0.70, 0.44, 0.05)], "cam_leaf",
+            sides=8, vr=(0.0, 0.25))
+    for i in range(6):                               # trunks show under the skirt
+        a = 2 * math.pi * i / 6 + rng.uniform(-0.3, 0.3)
+        b = Vector((0.04 * math.cos(a), 0.04 * math.sin(a), 0))
+        end = Vector((0.26 * math.cos(a), 0.26 * math.sin(a), 0.13))
+        mb.tube(bezier(b, b.lerp(end, 0.5) + UP * 0.05, end, 4),
+                [0.012, 0.010, 0.008, 0.006], "wood", sides=4)
+    for d in sphere_dirs(150):
+        if d.z < -0.42:
+            continue
+        k = rng.uniform(0.97, 1.04)
+        tip = Vector((d.x * rx * k, d.y * rx * k, centre_z + d.z * rz * k))
+        if tip.z < 0.05:
+            continue
+        normal = Vector((d.x / rx, d.y / rx, d.z / rz)).normalized()
+        axis = (normal + UP * 0.25).normalized()
+        azalea_leaves(mb, rng, tip, axis, 5)
+        if d.z > -0.25 and rng.random() < 0.7:
+            e1, e2 = perp_frame(axis)
+            for f in range(rng.choice((1, 1, 2))):
+                a = rng.uniform(0, 2 * math.pi)
+                off = (e1 * math.cos(a) + e2 * math.sin(a)) * 0.022
+                fa = (axis + off * 6).normalized()
+                azalea_flower(mb, rng, tip + off + axis * 0.004, fa)
+
+
+def azalea_small(mb, rng):
+    for i in range(3):
+        a = 2 * math.pi * i / 3 + rng.uniform(-0.4, 0.4)
+        end = Vector((0.05 * math.cos(a), 0.05 * math.sin(a), rng.uniform(0.14, 0.20)))
+        pts = bezier(Vector((0, 0, 0)), Vector((end.x * 0.3, end.y * 0.3, end.z * 0.6)), end, 4)
+        mb.tube(pts, [0.006, 0.005, 0.004, 0.003], "wood", sides=4)
+        tan = (pts[-1] - pts[-2]).normalized()
+        azalea_leaves(mb, rng, end, tan, 5, size=0.9)
+        p, t2 = sample(pts, 0.6)
+        azalea_leaves(mb, rng, p, t2, 3, size=0.75)
+
+
 FLOWERS = [
     # preview group, bundle mesh name, builder, random seed
     ("spider_lily", "treeKitsuneSpiderLily", spider_lily, 11),
@@ -420,6 +608,10 @@ FLOWERS = [
     ("hydrangea", "treeKitsuneHydrangeaSmall", hydrangea_small, 22),
     ("camellia", "treeKitsuneCamellia", camellia, 31),
     ("camellia", "treeKitsuneCamelliaSmall", camellia_small, 32),
+    ("iris", "treeKitsuneIris", iris, 41),
+    ("iris", "treeKitsuneIrisSmall", iris_small, 42),
+    ("azalea", "treeKitsuneAzalea", azalea, 51),
+    ("azalea", "treeKitsuneAzaleaSmall", azalea_small, 52),
 ]
 
 

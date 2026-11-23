@@ -131,6 +131,10 @@ public static class WrapTreePrefabs
         ("Assets/KitsuneFlowers/treeKitsuneHydrangeaSmall.fbx",  "treeKitsuneHydrangeaSmallRoot",  0.2f,  0.3f,  0.15f,  1f),
         ("Assets/KitsuneFlowers/treeKitsuneCamellia.fbx",        "treeKitsuneCamelliaRoot",        0.4f,  1.5f,  0.75f,  1f),
         ("Assets/KitsuneFlowers/treeKitsuneCamelliaSmall.fbx",   "treeKitsuneCamelliaSmallRoot",   0.15f, 0.35f, 0.175f, 1f),
+        ("Assets/KitsuneFlowers/treeKitsuneIris.fbx",            "treeKitsuneIrisRoot",            0.3f,  0.9f,  0.45f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneIrisSmall.fbx",       "treeKitsuneIrisSmallRoot",       0.1f,  0.26f, 0.13f,  1f),
+        ("Assets/KitsuneFlowers/treeKitsuneAzalea.fbx",          "treeKitsuneAzaleaRoot",          0.4f,  0.6f,  0.3f,   1f),
+        ("Assets/KitsuneFlowers/treeKitsuneAzaleaSmall.fbx",     "treeKitsuneAzaleaSmallRoot",     0.1f,  0.22f, 0.11f,  1f),
     };
 
     [MenuItem("Tools/Kitsune/Wrap Tree Prefabs With Unique Roots")]

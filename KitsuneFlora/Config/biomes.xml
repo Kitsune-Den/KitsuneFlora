@@ -31,6 +31,8 @@
         <decoration type="block" blockname="treeKitsuneSpiderLily"      prob=".010" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneHydrangea"       prob=".008" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneCamellia"        prob=".006" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneIris"            prob=".008" rotatemax="7"/>
+        <decoration type="block" blockname="treeKitsuneAzalea"          prob=".007" rotatemax="7"/>
         <!-- Wild-grove variety: mixes ages + looks so groves aren't clones -->
         <decoration type="block" blockname="treeKitsuneBambooWildSmall" prob=".006" rotatemax="7"/>
         <decoration type="block" blockname="treeKitsuneBambooWildMid"   prob=".005" rotatemax="7"/>
