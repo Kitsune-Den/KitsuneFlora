@@ -26,6 +26,8 @@
         <item name="treePlantedKitsuneSpiderLily1m"/>
         <item name="treePlantedKitsuneHydrangea1m"/>
         <item name="treePlantedKitsuneCamellia1m"/>
+        <item name="treePlantedKitsuneIris1m"/>
+        <item name="treePlantedKitsuneAzalea1m"/>
     </append>
 
     <append xpath="/lootcontainers/lootgroup[@name='seedsNoFlowers']">

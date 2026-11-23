@@ -4,21 +4,21 @@
 
 # KitsuneFlora
 
-![version](https://img.shields.io/badge/version-0.5.2-purple)
+![version](https://img.shields.io/badge/version-0.6.0-purple)
 ![7DTD](https://img.shields.io/badge/7DTD-V2.6--V3.4-orange)
 ![status](https://img.shields.io/badge/status-working-brightgreen)
 [![tests](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml/badge.svg)](https://github.com/Kitsune-Den/KitsuneFlora/actions/workflows/tests.yml)
 ![code](https://img.shields.io/badge/code-CC_BY--NC--SA_4.0-blue)
 ![meshes](https://img.shields.io/badge/meshes-Asset%20Store%20EULA-lightgrey)
 
-Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced. v0.5 adds three decor flowers built for this mod: **spider lily** (higanbana), **hydrangea** (ajisai) and **camellia** (tsubaki). Flowers drop no wood; picking one returns its seed.
+Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and garden plants: **sakura** (cherry blossom ~ bloom + leaf variants), **keyaki** (Japanese zelkova), **dogwood** (pink + white hanamizuki), **plane tree** (suzukake-no-ki), **bamboo**, **black pine** (kuromatsu), **boxwood** (tsuge), and **painted fern** (nishikishida). Everything is choppable, drops wood, and grows visibly from seed → sapling → mature using bundled custom meshes. Bamboo and black pine grow through a true three-stage chain; bamboo, boxwood and ferns plant in dense groves instead of tree-spaced. v0.5 adds three decor flowers built for this mod: **spider lily** (higanbana), **hydrangea** (ajisai) and **camellia** (tsubaki); v0.6 adds **iris** (ayame) and **azalea** (tsutsuji). Flowers drop no wood; picking one returns its seed.
 
 ## Status
 
-**🌸 v0.5 WORKING ~ 2026-11-18.**
+**🌸 v0.6 WORKING ~ 2026-11-23.**
 
-- 33 block defs across two templates: 10 trees/plants in mature, growth-stage, wild-variety and seed forms, plus 3 flowers (mature + seed each)
-- 33 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
+- 37 block defs across two templates: 10 trees/plants in mature, growth-stage, wild-variety and seed forms, plus 5 flowers (mature + seed each)
+- 37 wrapped prefabs in the `KitsuneFlora.unity3d` asset bundle
 - Biome decoration (pine_forest, rare-to-common), farm loot drops, trader stock
 - Bamboo + black pine grow through true three-stage meshes; bamboo, boxwood and ferns plant adjacent for dense groves and hedges
 - Foliage sways with a custom vertex-wind shader; saplings sit still
@@ -30,6 +30,7 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 | Game version | Mod version | State |
 |---|---|---|
+| V3.4 | 0.6.0 | Adds iris and azalea. Checked in-game on V3.4.0 (b10): both place from the creative menu, render from every side and sway. Same not-yet-checked list as the 0.5 flowers. Everything else is the same as 0.5.2 |
 | V3.4 | 0.5.2 | Same as 0.5.1 with boxwood that sways visibly (checked in-game on V3.4.0 b10) |
 | V3.4 | 0.5.1 | Same as 0.5.0 with painted ferns that sway visibly. Flowers checked in-game on V3.4.0 (b10): mod loads clean, all three place from the creative menu, render from every side and sway. Not yet checked: picking one for its seed, growing from seed, look at night, wild spawns, loot and trader stock. Trees and garden plants use the same meshes and hitboxes as 0.4.3 |
 | V3.4 | 0.4.3 | Tested in-game on V3.4.0 (b10): loads clean, plants place, saplings grow to mature trees, boxwood breaks in one punch and drops wood + seed, English names show, trees no longer look lit at night, tree and sapling hitboxes match their trunks |
@@ -51,7 +52,7 @@ Standalone 7 Days to Die V2.6-V3.4 mod adding ten Japanese-themed trees and gard
 
 In testing this was safe on a healthy save and went wrong when the save's block ID map (`blockmappings.nim`) did not load. One player hit it with the map file present, so treat an existing save as a risk and load Flora last if anything looks swapped.
 
-What happens: the save records a name for every block ID it has stored, and the game uses that map to keep those IDs fixed when the mod list changes. Without the map the game hands out IDs in load order. Flora adds 29 blocks (35 from 0.5.0) and its folder loads alphabetically before a lot of other mods, so every block from those mods moves 29 slots and the save shows the wrong block in their place.
+What happens: the save records a name for every block ID it has stored, and the game uses that map to keep those IDs fixed when the mod list changes. Without the map the game hands out IDs in load order. Flora adds 29 blocks (35 from 0.5.0, 39 from 0.6.0) and its folder loads alphabetically before a lot of other mods, so every block from those mods moves 29 slots and the save shows the wrong block in their place.
 
 Reported case (November 2026, Flora 0.4.1 on V3.3.0 with MPLogue's Urban Decay): giant floating advertisement signs along roads. In Urban Decay's block list the street lights and electric meter boxes sit exactly 29 slots after its billboards.
 
@@ -83,7 +84,7 @@ Nothing in Flora's own files touches signs, and newer Flora versions do not chan
 KitsuneFlora/                      ← what ships in the mod
 ├── ModInfo.xml
 ├── Config/
-│   ├── blocks.xml                 33 block defs: trees, growth stages, wild variants, flowers + seeds (plus 2 templates)
+│   ├── blocks.xml                 37 block defs: trees, growth stages, wild variants, flowers + seeds (plus 2 templates)
 │   ├── biomes.xml                 inject mature trees, wild variants + flowers into pine_forest decoration list
 │   ├── loot.xml                   add seeds to vanilla `seeds` / `seedsNoFlowers` groups (flower seeds go in `seeds` only)
 │   ├── traders.xml                add seeds to shared `seeds` trader_item_group
@@ -132,13 +133,15 @@ Unity workspace lives in a sibling `RedFoxAnimated` Unity project (path is local
 
 Wild-variety blocks ~ `treeKitsuneBambooWild{Small,Mid,Big}`, `treeKitsuneBoxwood{B,C}`, `treeKitsunePaintedFernB` ~ share a base plant's name and seed drop but swap in alternate meshes, so a biome-spawned grove isn't a field of clones.
 
-**Flowers ~ original meshes, decor only (v0.5):**
+**Flowers ~ original meshes, decor only (v0.5, v0.6):**
 
 | Flower | Mature block | Seed block | Notes |
 |---|---|---|---|
 | Spider lily | `treeKitsuneSpiderLily` | `treePlantedKitsuneSpiderLily1m` | Clump of red blooms on bare stems, about 0.9 m tall |
 | Hydrangea | `treeKitsuneHydrangea` | `treePlantedKitsuneHydrangea1m` | Blue and pink mophead shrub, about 0.8 m tall |
 | Camellia | `treeKitsuneCamellia` | `treePlantedKitsuneCamellia1m` | Evergreen shrub with red blooms, about 1.5 m tall |
+| Iris | `treeKitsuneIris` | `treePlantedKitsuneIris1m` | Fans of sword leaves under violet flowers, about 0.9 m tall |
+| Azalea | `treeKitsuneAzalea` | `treePlantedKitsuneAzalea1m` | Clipped mound covered in pink flowers, about 0.6 m tall |
 
 Flowers use the grove pattern (crop-class seed, `treeKitsuneGroveMaster` mature block), break in one punch and return only their own seed: no wood, no item, no recipe. All three share one material and one small palette texture, on the same wind shader as the other plants. Their seeds are in the `seeds` loot and trader groups but not `seedsNoFlowers`.
 
@@ -162,7 +165,7 @@ The seed-stage block uses a **small variant of the same tree** from the bundle (
 - **"Roadside Trees"** ~ the specimen trees (sakura, keyaki, dogwood, plane tree), purchased under one developer seat.
 - **"FreeJapaneseGarden"** by Waldemarst ~ the garden plants (bamboo, black pine, boxwood, painted fern).
 
-The three **flower meshes** (spider lily, hydrangea, camellia) are not from an asset pack: they are generated by `Workspace/build_flowers.py` in Blender, and the FBX files are in `Workspace/FlowerMeshes/`.
+The five **flower meshes** (spider lily, hydrangea, camellia, iris, azalea) are not from an asset pack: they are generated by `Workspace/build_flowers.py` in Blender, and the FBX files are in `Workspace/FlowerMeshes/`.
 
 Both are bundled into the compiled `KitsuneFlora.unity3d` file as part of this mod (a derivative work, permitted under the Unity Asset Store EULA). Specifically:
 
@@ -196,7 +199,7 @@ Procedure (automated by `Workspace/WrapTreePrefabs.cs`):
 6. Re-export bundle.
 7. Run `Workspace/tag_bundle_colliders.py` on the exported bundle (see "V3.x modding lessons" ~ without it boxwood, ferns and grove seeds can't be hit).
 
-Verification with UnityPy: bundle's top-level GameObjects should include all 33 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
+Verification with UnityPy: bundle's top-level GameObjects should include all 37 wrapper names (Transform + BoxCollider, no orphaned inner colliders). The old FBX-named GameObjects may still be present as dependencies but aren't referenced by XML.
 
 ## Other V2.6 modding lessons baked into this mod
 
